@@ -1,0 +1,83 @@
+<html style="overflow: hidden;">
+
+<head>
+ <style type="text/css">
+ 	button {
+ 		width: 50vw;
+ 		height: 50vw;
+ 	}
+ </style>
+
+  <meta charset="UTF-8">
+  
+ <meta name="viewport" content="max-width=device-width, max-height=device-height, width=100%, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+</head>
+<body style="overflow: hidden;">
+	<div id="panel"></div>
+	
+	<button onclick="btnClicked();"></button>
+</body>
+
+
+
+<script>
+const goalTime = 5000; // msec
+
+const resultTexts = [
+	[0, "あなたが神か"],
+	[10, "凄すぎる。。。やばすぎる。。。"],
+	[20, "ざわ… ざわ…"],
+	[50, "おーやるじゃん！"],
+	[100, "うん。いいと思う。"],
+	[200, "まぁそこそこ"],
+	[500, "まぁ、まぁ…"],
+	[1000, "うーん。。"],
+	[2000, "ちょっとズレすぎかも。。"]
+];
+const lastResultText = "俺はもうヤバイと思う";
+
+
+var isStarted = false;
+var startTime;
+
+const instText = "ボタンを押してからちょうど"+ (goalTime / 1000) +"秒の瞬間にもう一度ボタンを押そう！";
+
+alert(instText);
+
+
+
+function btnClicked(){
+	if( ! isStarted ){
+		isStarted = true;
+		startTime = Date.now();
+	} else {
+		let elapsedTime = Date.now() - startTime;
+		let errorTime = Math.abs(elapsedTime - goalTime);
+		let resultText = lastResultText;
+		for( let i=0; i<resultTexts.length; i++ ){
+			if( errorTime <= resultTexts[i][0] ){
+				resultText = resultTexts[i][1];
+				break;
+			}
+		}
+		
+		
+		let str
+			= "結果 : " + (elapsedTime / 1000) + "秒\n\n"
+			+ "[評価]\n" + resultText;
+		
+		alert(str);
+		
+		isStarted = false;
+	}
+}
+ 
+
+
+
+
+</script>
+
+
+</html>
