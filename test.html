@@ -1,0 +1,484 @@
+<html style="overflow: hidden;">
+
+<head>
+ <style type="text/css">
+ 	td, button {text-align:center;}
+ 	button {font-size: 20}
+ 	td {font-size: 15; color: blue}
+ 	td#clue {
+ 		font-size: 15;
+ 		color: black;
+ 		background-color :grey;
+ 	}
+ 	td#fixed {font-size: 30; color: black}
+ 	table {
+ 		width: 90vw;
+ 		height: 90vw;
+ 		table-layout: fixed;
+ 	}
+ 	
+</style>
+
+  <meta charset="UTF-8">
+  
+ <meta name="viewport" content="max-width=device-width, max-height=device-height, width=100%, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+</head>
+  <body style="overflow: hidden;">
+
+  <table id="main" border="1" style="border: 1px solid black; border-collapse: collapse;" >
+  </table>
+  
+  <br/>
+  <span id="buttons"></span>
+  <br/><br/>
+  <button onclick="btnClicked_del(this);">del</button>  <button onclick="btnClicked_fix(this);">fix</button>
+  <button onclick="btnClicked_blk(this);">■</button>
+   <br/>
+   <button onclick="checkAnswer(dataForTable);">Ans</button>   <button onclick="saveTable();">Save</button>
+   <button onclick="loadTable();">Load</button>
+  </body>
+
+<script>
+/*
+canvasを背景にする方法
+http://honttoni.blog74.fc2.com/blog-entry-203.html
+
+Touchイベント
+https://web-breeze.net/web-piano-html5audio/ https://web-breeze.net/js-touch-event/
+
+*/
+//現状、rowを8以上にした際の表示がはみだしたりいろいろだめ
+ const numRow = 7;
+ const numCol = numRow;
+ 
+ 
+const delTdInput = "del";
+const inputBlock = "■";
+const toFix = "fix";
+
+const fixed = "fixed";
+ 
+ var mainTable = document.getElementById('main');
+const buttons = document.getElementById('buttons');
+ 
+ 
+ var selectedTD = null;
+ /* アンドゥ機能をつけようと用意した変数
+ var previousSelectedTD = null;
+ var previousTDclone = null;
+ */
+ 
+ var savedTable = null;
+ 
+ /*
+ let dataForTable = [
+ 		[1, 0, 2, 0, 3],
+ 		[2, 3, 0, 1, 0],
+ 		[3, 0, 0, 2, 1],
+ 		[0, 2, 1, 3, 0],
+ 		[0, 1, 3, 0, 2],
+ 	];
+ 	*/
+ 	
+ 	
+ 	let dataForTable = generatePuzzle( numRow, numCol );
+ 	showQuiz(dataForTable, mainTable);
+
+
+
+function tdClicked(e){
+	let td = e.target;
+
+	let rowIdx = td.parentNode.rowIndex;
+	let colIdx = td.cellIndex;
+	
+	let maxRowIdx = mainTable.rows.length -2;
+	let maxColIdx = mainTable.rows[0].cells.length -2;
+	
+	// alert(maxrow + ", " + maxcol);
+	
+	if ((rowIdx <= maxRowIdx) && (colIdx <= maxColIdx)){
+		let td = e.target;
+		
+		if (td.textContent == ""){
+			let str = "";
+			for (let i=1; i<=numRow-2; i++){
+				str += i;
+			}
+			td.innerHTML = str;
+		}
+		
+		
+		selectedTD = td;
+		
+	}
+}
+
+/*
+function btnClickedEvent(e){
+	btnClicked(e.target);
+}*/
+
+function btnClicked_del(){
+	if(selectedTD != null){
+		selectedTD.id = "";
+		selectedTD.innerHTML = "";
+		selectedTD.style.backgroundColor = "";
+	}
+}
+
+function btnClicked_fix(){
+	if(selectedTD != null){
+		if (selectedTD.id == fixed){
+				selectedTD.id = "";
+			} else {
+				selectedTD.id = fixed;
+		}
+	}
+}
+
+function btnClicked_blk(){
+	if(selectedTD != null){
+		selectedTD.innerHTML = "0";
+		selectedTD.style.backgroundColor = "black";
+		selectedTD.id = fixed;
+	}
+}
+  
+function btnClicked_num(e){
+	if(selectedTD != null){
+		drawTdInside(selectedTD, e.target.value);
+	}
+}
+
+
+
+function saveTable(){
+	let result = confirm("記録しますか？");
+	
+	if (result){
+		savedTable = mainTable.cloneNode(true);
+	}
+}
+
+function loadTable(){
+	if (savedTable == null){
+		alert("記録がありません");
+	} else {
+		let result = confirm("読込みますか？");
+	
+		if (result){
+			mainTable.replaceWith(savedTable.cloneNode(true));
+			mainTable = document.getElementById('main');
+			
+			for( const tr of mainTable.rows){
+				for( const td of tr.cells){
+					td.addEventListener("click", tdClicked);
+					// alert(td.innerHTML);
+				}
+			}
+        }
+    }
+}
+
+
+function drawTdInside(td, val){
+	if (td.id == fixed){
+	/*	if (val == inputBlock){
+			td.innerHTML = "";
+			td.style.backgroundColor = "black";
+			alert(td.style.backgroundColor);
+		} else { */
+			td.innerHTML = val;
+			td.style.backgroundColor = "";
+	//	}
+	} else {
+		let txtTd = td.textContent;
+		
+		idx = txtTd.indexOf(val);
+		if (idx == -1){
+			td.innerHTML += val;
+		} else {
+			td.innerHTML = txtTd.replace(val, "");
+		}
+	}
+	
+	
+	td.style.backgroundColor = "";
+}
+
+
+function generatePuzzle(row, col){
+	const maxLoopCnt = 1000;
+	
+	let expectedValues = new Array(row -1);
+	for(let i=0; i<expectedValues.length; i++){
+		expectedValues[i] = i;
+	}
+	
+	// -1 means empty
+	let tableFilledEmpty = new Array(row);
+	for(let i=0; i<tableFilledEmpty.length; i++){
+		tableFilledEmpty[i] = new Array(col);
+		for(let j=0; j<tableFilledEmpty[i].length; j++){
+			tableFilledEmpty[i][j] = -1;
+		}
+	}
+	
+	let result;
+	
+	let isSucceed = false;
+	trialStart: for( let cnt=0; cnt<maxLoopCnt; cnt++){
+		result = tableFilledEmpty.concat();
+		
+		let rndArray = generateRndArray(row, col);
+		for (let i=0; i<rndArray.length; i++){
+			let isFailedToSet = setAllowValue(result, rndArray[i], expectedValues);
+			
+			if (isFailedToSet) {
+				continue trialStart;
+			}
+		} 
+		isSucceed = true;
+		alert("問題作成成功 試行回数 = " + cnt);
+		break trialStart;
+	}
+	
+	if (! isSucceed){
+		alert("問題作成失敗");
+	}
+	return( result );
+}
+
+
+
+function setAllowValue(data, pos, expectedValues){
+	let candidateValues = expectedValues.concat();
+	
+	let row = Math.floor( pos / data.length );
+	let col = pos % data.length;
+	
+	let arr = new Array();
+	for (let i=0; i<data[row].length; i++){
+		if (i != col){
+			arr.push( data[row][i] );
+		}
+	}
+	serchArray(arr, candidateValues);
+	
+	arr = new Array();
+	for (let i=0; i<data.length; i++){
+		if (i != row){
+			arr.push( data[i][col] );
+		}
+	}
+	serchArray(arr, candidateValues);
+	
+	
+	if (candidateValues.length < 1){
+		return true;
+	} else {
+		let rnd = generateRndInteger(0, candidateValues.length -1)
+	
+		data[row][col] = candidateValues[rnd];
+	
+		return false;
+	}
+}
+
+function serchArray(arr, candidateValues){
+	let isZeroAppeared = false;
+	for (let i=0; i<arr.length; i++){
+			switch (arr[i]){
+				case -1:
+					break;
+				case 0:
+					if (isZeroAppeared){
+						delValueInArr( candidateValues, 0);
+					} else {
+						isZeroAppeared = true;
+					}
+					break;
+				default:
+					delValueInArr( candidateValues, arr[i]);
+			}
+	}
+}
+
+function delValueInArr(arr, val){
+	let idx = arr.indexOf(val);
+	
+	if (idx >= 0){
+		arr.splice(idx, 1);
+	}
+}
+
+function generateRndArray(row, col){
+	let rndArray = new Array( row*col );
+
+	for(let i=0; i<row; i++){
+		for(let j=0; j<col; j++){
+			let idx = i*row + j;
+			rndArray[idx] = idx;
+		}
+	}
+	
+	
+	for( let i=0; i<rndArray.length; i++){
+		 let rndIdx = generateRndInteger(i, rndArray.length -1)
+		 
+		 let val = rndArray[rndIdx];
+		 rndArray[rndIdx] = rndArray[i];
+		 rndArray[i] = val;
+	}
+	
+	
+	return rndArray;
+}
+
+
+
+function generateRndInteger(min, max){
+   return Math.floor( Math.random() * (max - min +1) +  min);
+}
+
+
+
+function showQuiz(data, table){
+	let tdWidth = Math.floor(mainTable.clientWidth / (data.length +1));
+	let tdHeight = tdWidth; // mainTable.clientHeight / (data[0].length +1);
+	for(let i=0; i<data.length +1; i++){
+        let tr = table.insertRow(-1);
+        for(let j=0; j<data[0].length +1; j++){
+            let td = tr.insertCell(-1);
+            
+            td.addEventListener("click", tdClicked);
+            td.style.width = tdWidth;
+            td.style.height = tdHeight;
+        }
+    }
+
+
+	for(let i=0; i<data.length; i++){
+		let tr = table.rows[i];
+		let td = tr.cells[tr.cells.length-1];
+		td.id = "clue";
+		
+		let val = getBetweenedValue(data[i]);
+		let txt = document.createTextNode(val);
+		td.appendChild(txt);
+	}
+	
+	
+	let tr = table.rows[ table.rows.length -1 ];
+	for(let col=0; col<data[0].length; col++){
+		let td = tr.cells[col];
+		td.id = "clue";
+		
+		let verticalValues = new Array(data.length);
+		for(let row=0; row<data.length; row++){
+			verticalValues[row] = data[row][col];
+		}
+		let val = getBetweenedValue(verticalValues);
+		let txt = document.createTextNode(val);
+		td.appendChild(txt);
+	}
+	
+	
+	for(let i=1; i<=data.length-2; i++){
+		let btn = createButton(i);
+		buttons.appendChild(btn);
+	}
+}
+
+
+function createButton(val){
+	let btn = document.createElement('button');
+	btn.type = 'button';
+	btn.addEventListener("click", btnClicked_num);
+	
+	btn.innerHTML = val;
+	btn.value = val;
+
+	return btn;
+}
+
+
+
+function getBetweenedValue(inArray){
+	let sumVal = 0;
+	let flgZeroAppeared = false;
+	for(let i=0; i<inArray.length; i++){
+		if(flgZeroAppeared){
+			sumVal += inArray[i];
+		}
+		
+		if(inArray[i] == 0){
+			flgZeroAppeared = !flgZeroAppeared;
+		}
+	}
+	
+	return sumVal;
+}
+
+
+
+function checkAnswer(data){
+	let str = "";
+	let isAllCorrect = true;
+	for( let row=0; row<data.length; row++){
+		for( let col=0; col<data[row].length; col++){
+			let td = mainTable.rows[row].cells[col];
+			let txtTd = td.textContent;
+			let txtAns = "" + data[row][col];
+			
+			if (txtTd == txtAns){
+				str += "_";
+			} else {
+				str += "x";
+				isAllCorrect = false;
+			}
+			str += ", ";
+		}
+		str += "\n";
+	}
+	
+	let result = confirm("回答チェックしますか？");
+	if (result){
+		if (isAllCorrect){
+			result  = confirm("正解!");
+			
+			if (result){
+				showAnswerTable(data);
+			}
+		} else {
+			result  = confirm("不正解...");
+			
+			if (result){
+				result  = confirm(str);
+				
+				if (result){
+					showAnswerTable(data);
+				}
+			}
+		}
+	}
+}
+
+function showAnswerTable(data){
+	let str = "";
+	
+	for(let i=0; i<data.length; i++){
+		for(let j=0; j<data[i].length; j++){
+			str += data[i][j] + ", ";
+		}
+		str += "\n";
+	}
+	
+	alert(str);
+}
+
+
+</script>
+</html>
