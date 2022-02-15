@@ -1,6 +1,7 @@
 <html style="overflow: hidden;">
 
 <head>
+ <title>5秒ゲーム</title>
  <style type="text/css">
  	button {
  		color: black;
@@ -64,10 +65,11 @@ function btnClicked(){
 		}
 		
 		
+		let txtTime = elapsedTime / 1000;
+		txtTime = txtTime.toFixed(3);
 		let str
-			= "結果 : " + (elapsedTime / 1000) + "秒\n\n"
+			= "結果 : " + txtTime + "秒\n\n"
 			+ "[評価]\n" + resultText;
-		
 		alert(str);
 		
 		isStarted = false;
