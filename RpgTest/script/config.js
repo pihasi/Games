@@ -6,7 +6,7 @@ System.config({
   },
   packages: {
     ".": {
-      main: './main.ts',
+      main: './script/main.ts',
       defaultExtension: 'ts'
     }
   },
@@ -22,5 +22,5 @@ System.config({
   }
 });
 
-System.import('./main')
+System.import('./script/main')
   .catch(console.error.bind(console));
