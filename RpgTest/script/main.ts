@@ -2,13 +2,6 @@ import { Logger } from './log';
 
 Logger.log('TypeScript works!')
 
-
-
-var helloWorld = new HelloWorld("Good Morning!!");
-document.getElementById('test').innerHTML = helloWorld.greet();
-
-
-
 class HelloWorld
 {
   constructor(public displayText: string) {}
@@ -18,4 +11,11 @@ class HelloWorld
     return this.displayText;
   }
 }
+
+
+
+var helloWorld = new HelloWorld("Good Morning!!");
+document.getElementById('test').innerHTML = helloWorld.greet();
+
+
 
