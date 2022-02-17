@@ -1,70 +1,67 @@
 'use strict'
 
 /**
- * スプライトに関してのクラス
+ * ゲームづくりの基本となるクラス
  */
-class Sprite {
+class Game {
 
   /**
    * 引数
-   * img : 画像ファイルまでのパス
-   * width : 画像の表示する範囲（横幅）
-   * height : 画像の表示する範囲（縦幅）
+   * width : ゲームの横幅
+   * height : ゲームの縦幅
    */
-  constructor(img, width, height) {
-    //this.imgに、あなたは画像ですよ、と教える
-    this.img = new Image();
-    //this.img.srcに画像ファイルまでのパスを代入
-    this.img.src = img;
-    //画像の初期位置
-    this.x = this.y = 0;
-    //画像を表示する範囲の横幅。引数widthが指定されていない場合、this.widthに32を代入
-    this.width = width || 32;
-    //画像を表示する範囲の縦幅。引数heightが指定されていない場合、this.heightに32を代入
-    this.height = height || 32;
-    //何番目の画像を表示するか
-    this.frame = 0;
+  constructor(width, height) {
+    //canvas要素を作成
+    this.canvas = document.createElement('canvas');
+    //作成したcanvas要素をbodyタグに追加
+    document.body.appendChild(this.canvas);
+    //canvasの横幅（ゲームの横幅）を設定。もし横幅が指定されていなければ320を代入
+    this.canvas.width = width || 320;
+    //canvasの縦幅（ゲームの縦幅）を設定。もし縦幅が指定されていなければ320を代入
+    this.canvas.height = height || 320;
+
+    //ゲームに登場する全てのもの（オブジェクト）を入れるための配列
+    this.objs = [];
   } //constructor() 終了
 
-  /**Gameクラスのメインループからずっと呼び出され続ける
-   *
-   * 引数
-   * canvas : 紙（キャンバス）
+  /**
+   * startメソッドを呼び出すことで、メインループが開始される
    */
-  update(canvas) {
-    //画像などを画面に表示するためのメソッドを呼び出す
-    this.render(canvas);
-  } //update() 終了
+  start() {
+    //メインループを呼び出す
+    this._mainLoop();
+  } //start() 終了
 
   /**
-   * 画像などを画面に表示するためのメソッド
+   * メインループ
+   */
+  _mainLoop() {
+    //画家さん（コンテキスト）を呼ぶ
+    const ctx = this.canvas.getContext('2d');
+    //塗りつぶしの色に、黒を指定する
+    ctx.fillStyle = '#000000';
+    //左上から、画面のサイズまでを、塗りつぶす
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    //ゲームに登場する全てのもの（オブジェクト）の数だけ繰り返す
+    for (let i = 0; i < this.objs.length; i++) {
+      //スプライトやテキストなど、すべてのオブジェクトのupdateメソッドを呼び出す
+      this.objs[i].update(this.canvas);
+    }
+
+    //自分自身（_mainLoop）を呼び出して、ループさせる
+    requestAnimationFrame(this._mainLoop.bind(this));
+  } //_mainLoop() 終了
+
+  /**
+   * オブジェクトをゲームに追加できるようになる、addメソッドを作成
    *
    * 引数
-   * canvas : 紙（キャンバス）
+   * obj : 追加したいオブジェクト
    */
-  render(canvas) {
-    //キャンバスの外にスプライトがあるとき、ここでこのメソッドを終了する
-    if (this.x < -1 * this.width || this.x > canvas.width) return;
-    if (this.y < -1 * this.height || this.y > canvas.height) return;
-
-    //X,Y方向に、何番目の画像か
-    const _frameX = this.frame % (this.img.width / this.width);
-    const _frameY = ~~(this.frame / (this.img.width / this.width));
-
-    //画家さん（コンテキスト）を呼ぶ
-    const _ctx = canvas.getContext('2d');
-    //画家さんに、絵を描いてとお願いする
-    _ctx.drawImage(
-      this.img,
-      this.width * _frameX,
-      this.height * _frameY,
-      this.width,
-      this.height,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    );
-  } //render() 終了
+  add(obj) {
+    //this.objs配列の末尾に、objの値を追加
+    this.objs.push(obj);
+  } //add() 終了
 
 }
