@@ -8,12 +8,17 @@ var backGround = null;
 
 var isNeedUpdate = false;
 
+var prioritySprite = null;
+
 var canvas = document.createElement('canvas');
     document.body.appendChild(canvas);
     canvas.width = widthCanvas;
     canvas.height = heightCanvas;
-    
-    canvas.addEventListener("click", searchForClickedSprite);
+    startCanvasAcceptClicked();
+
+function startCanvasAcceptClicked(){
+      canvas.addEventListener("click", searchForClickedSprite);
+}
 
 function setBackGround(img){
     if( img != null) {
@@ -36,6 +41,7 @@ function killAllSprits(){
 
   
 function searchForClickedSprite(e){
+  if(prioritySprite == null){
     	  let clickX = e.pageX;
     	  let clickY = e.pageY;
     	  
@@ -55,6 +61,9 @@ function searchForClickedSprite(e){
           sprits[i].clicked();
           break;
         }
+  } else {
+    prioritySprite.clicked();
+  }
 }
     
 
@@ -82,6 +91,10 @@ function loopCanvasUpdate() {
     for (let i = 0; i < sprits.length; i++) {
       //スプライトやテキストなど、すべてのオブジェクトのupdateメソッドを呼び出す
       sprits[i].update(canvas);
+    }
+    
+    if(prioritySprite != null){
+      prioritySprite.update(canvas);
     }
 
     //自分自身（_mainLoop）を呼び出して、ループさせる

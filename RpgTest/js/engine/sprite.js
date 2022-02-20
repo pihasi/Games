@@ -67,7 +67,7 @@ class Sprite {
   } //render() 終了
   
   clicked(){
-    console.log(this.img.src)
+    prioritySprite = new MessageWindow("test da yo", this.x+this.width, this.y);
   }
 
 }
