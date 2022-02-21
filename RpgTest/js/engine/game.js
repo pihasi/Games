@@ -33,7 +33,25 @@ function addSprite(sprite) {
     //sprits配列の末尾に、objの値を追加
     sprits.push(sprite);
   } //add() 終了
+
+function addSimpleCharacter(pic, x, y, dialogue){
+  const sprite = new Sprite(pic);
+  sprite.setx(x);
+  sprite.sety(y);
+  sprite.addAction( function(){
+    showMessageWindow(dialogue, this)
+  });
+  addSprite(sprite);
+}
   
+
+
+function resetScene(){
+  killAllSprits();
+  setBackGround(null);
+  
+  canvas.getContext("2d").clearRect(0,0, canvas.width,canvas.height);
+}
 function killAllSprits(){
   sprits =[];
 }
@@ -78,6 +96,9 @@ function startCanvasUpdate() {
 function loopCanvasUpdate() {
   if(isNeedUpdate){
     const ctx = canvas.getContext('2d');
+    
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    
     if(backGround == null) {
       //塗りつぶしの色に、黒を指定する
       ctx.fillStyle = '#000000';

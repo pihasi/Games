@@ -76,7 +76,5 @@ class Sprite {
     for(let i=0; i<this.actions.length; i++){
       this.actions[i].call(this);
     }
-    // prioritySprite = new MessageWindow("test da yo", this.x+this.width, this.y);
   }
-
 }

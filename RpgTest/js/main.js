@@ -2,47 +2,39 @@
 
 //ブラウザがページを完全に読みこむまで待つ
 addEventListener('load', () => {
+  testMap();
+  
+  /*
   const protagonist = new Sprite('pic/hero.png');
   protagonist.setx(64*2);
   protagonist.sety(64*4);
   addSprite(protagonist);
   
-  const house = new Sprite('pic/house.png');
-  house.setx(64*2);
-  house.sety(0);
-  house.addAction( function(){
-    showMessageWindow("僕は家だよ！！！", this)
-  });
-  addSprite(house);
+  addSimpleCharacter("pic/house.png",
+    64*2, 0,
+    "僕は家だよ！！！");
 
-  const baby = new Sprite('pic/baby-smile-male.png');
-  baby.setx(64*2);
-  baby.sety(64*2);
-  baby.addAction( function(){
-    showMessageWindow("我輩は赤ちゃんである。\n名前はまだない", this)
-  });
-  addSprite(baby);
+  addSimpleCharacter("pic/baby-smile-male.png",
+    64*2, 64*2,
+    "我輩は赤ちゃんである。\n名前はまだない");
 
-  const slime = new Sprite('pic/slime.png');
-  slime.setx(0);
-  slime.sety(64);
-  slime.addAction( function(){
-    showMessageWindow("ぷよーん\nぷよよよ〜ん\nぼよよーーん！", this)
-  });
-  addSprite(slime);
+  addSimpleCharacter("pic/monster/slime.png",
+    0, 64,
+    "ぷよーん\nぷよよよ〜ん\nぼよよーーん！");
 
-  const mummy = new Sprite('pic/mummy.png');
-  mummy.setx(64*3);
-  mummy.sety(64*4);
-  mummy.addAction( function(){
-    showMessageWindow("干からびそうなう", this)
-  });
-  addSprite(mummy);
+  addSimpleCharacter("pic/monster/mummy.png",
+    64*3, 64*4,
+    "干からびそうなう");
+    
+  const arrowRight
+    = new Sprite("pic/info/rightArrow.png");
+  arrowRight.setx(64*4);
+  arrowRight.sety(64*2);
+  addSprite(arrowRight);
 
-  
-  
-  setBackGround("pic/roadOnGrass.png");
+  setBackGround("pic/place/roadOnGrass.png");
 
   startCanvasUpdate();
-
+*/
 });
+
