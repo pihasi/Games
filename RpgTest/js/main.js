@@ -10,11 +10,17 @@ addEventListener('load', () => {
   const house = new Sprite('pic/house.png');
   house.setx(64*2);
   house.sety(0);
+  house.addAction( function(){
+    showMessageWindow("僕は家だよ！！！", this)
+  });
   addSprite(house);
 
   const baby = new Sprite('pic/baby-smile-male.png');
   baby.setx(64*2);
   baby.sety(64*2);
+  baby.addAction( function(){
+    showMessageWindow("我輩は赤ちゃんである。\n名前はまだない", this)
+  });
   addSprite(baby);
 
   
@@ -23,7 +29,6 @@ addEventListener('load', () => {
   
   setBackGround("pic/roadOnGrass.png");
 
-  //gameに、ゲームをスタートして、とお願いする
   startCanvasUpdate();
 
 });

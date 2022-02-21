@@ -21,6 +21,8 @@ class Sprite {
     //引数widthが指定されていない場合、64を代入
     this.width = width || 64;
     this.height = height || 64;
+    
+    this.actions =[];
   } //constructor() 終了
   
   setx(x){
@@ -29,6 +31,10 @@ class Sprite {
 
   sety(y){
     this.y = y;
+  }
+  
+  addAction(action){
+    this.actions.push(action);
   }
 
 
@@ -58,16 +64,19 @@ class Sprite {
     //画家さんに、絵を描いてとお願いする
     _ctx.drawImage(
       this.img,
-      0, 0,   this.img.width, this.img.height,
+      this.x, this.y, this.width, this.height /*,
       this.x,
       this.y,
       this.width,
-      this.height
+      this.height */
     );
   } //render() 終了
   
   clicked(){
-    prioritySprite = new MessageWindow("test da yo", this.x+this.width, this.y);
+    for(let i=0; i<this.actions.length; i++){
+      this.actions[i].call(this);
+    }
+    // prioritySprite = new MessageWindow("test da yo", this.x+this.width, this.y);
   }
 
 }

@@ -9,11 +9,35 @@ class MessageWindow {
     this.txt = txt;
     this.x = x;
     this.y = y;
+    
+    this.preCanvas = document.createElement('canvas');
+    this.preCanvas.width = canvas.width;
+    this.preCanvas.height = canvas.height / 3;
+    
+    const preCtx = this.preCanvas.getContext('2d');
+    
+    /*
+    //塗りつぶす色は白';
+    preCtx.fillStyle = 'rgba(255,255,255,0.99)'; 
+    preCtx.fillRect(this.margin, this.margin + this.nameHeight, this.windowWidth, this.windowHeight);
+
+    //枠は青っぽい
+    preCtx.strokeStyle = 'rgba(125,125,255,0.99)';
+    preCtx.strokeRect(this.margin, this.margin + this.nameHeight, this.windowWidth, this.windowHeight);
+*/
+    preCtx.fillStyle = "black";
+    preCtx.font = "30px 'ＭＳ ゴシック'";
+    preCtx.textAlign = "left";
+    preCtx.textBaseline = "top";
+    preCtx.fillText(this.txt, 20, 75, 200);
+    console.log(123456);
+    
+    const ctx = canvas.getContext('2d');
+    
+    ctx.drawImage(this.preCanvas, 
+      0, 0, this.preCanvas.width, this.preCanvas.height);
+
   } //constructor() 終了
-  
-  setTxt(txt){
-    this.txt = txt;
-  }
   
   setx(x){
     this.x = x;
@@ -21,6 +45,9 @@ class MessageWindow {
 
   sety(y){
     this.y = y;
+  }
+  
+  preRenderingBoard() {
   }
 
 
@@ -41,16 +68,11 @@ class MessageWindow {
    * canvas : 紙（キャンバス）
    */
   render(canvas) {
-    const _ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
+    
+  // ctx.drawImage(this.preCanvas, 0, 0, this.preCanvas.width, this.preCanvas.height, 0, 0);
 
-  _ctx.fillStyle = "blue";
-    _ctx.font = "30px 'ＭＳ ゴシック'";
-    _ctx.textAlign = "left";
-    _ctx.textBaseline = "top";
-    
-    _ctx.fillText(this.txt, 20, 75, 200);
-      
-    
+
     
   } //render() 終了
   
@@ -58,4 +80,13 @@ class MessageWindow {
     prioritySprite = null;
   }
 
+}
+
+
+function showMessageWindow(txt, spriteSaying){
+  let x = spriteSaying.x;
+  let y = spriteSaying.y;
+  let w = spriteSaying.width;
+
+  prioritySprite = new MessageWindow(txt , x+w, y);
 }
