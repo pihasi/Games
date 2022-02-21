@@ -23,8 +23,22 @@ addEventListener('load', () => {
   });
   addSprite(baby);
 
-  
-  
+  const slime = new Sprite('pic/slime.png');
+  slime.setx(0);
+  slime.sety(64);
+  slime.addAction( function(){
+    showMessageWindow("ぷよーん\nぷよよよ〜ん\nぼよよーーん！", this)
+  });
+  addSprite(slime);
+
+  const mummy = new Sprite('pic/mummy.png');
+  mummy.setx(64*3);
+  mummy.sety(64*4);
+  mummy.addAction( function(){
+    showMessageWindow("干からびそうなう", this)
+  });
+  addSprite(mummy);
+
   
   
   setBackGround("pic/roadOnGrass.png");
