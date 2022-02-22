@@ -22,7 +22,21 @@
 	<script>
 	  var playData = {
 	    oneScene:{},
-	    wholeGame:{}
+	    wholeGame:{},
+	    testMethod(){
+	      let a = 2;
+	      a++;
+	      console.log(this);
+	      console.log(a);
+	    },
+	    
+	    get aaa(){
+	      return 777;
+	    },
+	    
+	    set bbb(val){
+	      this.ttt = val*2;
+	    }
 	  };
 	  playData.flg = 2;
 	  playData.oneScene.ert ="34567";
@@ -31,7 +45,8 @@
 	  const key = "baby_x";
 	  playData.oneScene[key] = 20;
 	  
-	  console.log(playData.oneScene[key]);
+	  playData.bbb = 11;
+	  console.log(playData.ttt);
 	</script>
 </body>
 </html>
