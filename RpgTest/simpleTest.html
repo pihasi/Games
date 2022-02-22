@@ -20,7 +20,18 @@
 </head>
 <body>
 	<script>
-	  console.log(12345);
+	  var playData = {
+	    oneScene:{},
+	    wholeGame:{}
+	  };
+	  playData.flg = 2;
+	  playData.oneScene.ert ="34567";
+	  
+	  
+	  const key = "baby_x";
+	  playData.oneScene[key] = 20;
+	  
+	  console.log(playData.oneScene[key]);
 	</script>
 </body>
 </html>
