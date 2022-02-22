@@ -2,20 +2,19 @@
 
 const startScene = testMap;
 
-
-
-
 const widthCanvas = 320;
 const heightCanvas = 320;
 
+
+
 var sprits = [];
+var prioritySprite = null;
 var backGround = null;
 
+var canvas;
 var isNeedUpdate = false;
 
-var prioritySprite = null;
 
-var canvas;
 
 function startGame(){
   let promisese = generatePromisesForPreLoad();
@@ -48,9 +47,8 @@ function setBackGround(img){
   }
   
 function addSprite(sprite) {
-    //sprits配列の末尾に、objの値を追加
     sprits.push(sprite);
-  } //add() 終了
+  }
 
 function addSimpleCharacter(pic, x, y, dialogue){
   const sprite = new Sprite(pic);
@@ -118,17 +116,13 @@ function loopCanvasUpdate() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     
     if(backGround == null) {
-      //塗りつぶしの色に、黒を指定する
       ctx.fillStyle = '#000000';
-      //左上から、画面のサイズまでを、塗りつぶす
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     } else {
       ctx.drawImage(backGround,0,0,
         canvas.width, canvas.height);
     }
-    //ゲームに登場する全てのもの（オブジェクト）の数だけ繰り返す
     for (let i = 0; i < sprits.length; i++) {
-      //スプライトやテキストなど、すべてのオブジェクトのupdateメソッドを呼び出す
       sprits[i].update(canvas);
     }
     
@@ -136,7 +130,6 @@ function loopCanvasUpdate() {
       prioritySprite.update(canvas);
     }
 
-    //自分自身（_mainLoop）を呼び出して、ループさせる
     requestAnimationFrame(loopCanvasUpdate);
   }
 }
