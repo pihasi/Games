@@ -29,17 +29,6 @@ class MessageWindow {
     }
   }
   
-  setx(x){
-    this.x = x;
-  }
-
-  sety(y){
-    this.y = y;
-  }
-  
-  preRenderingBoard() {
-  }
-
 
   update(canvas) {
     this.render(canvas);
