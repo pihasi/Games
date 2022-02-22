@@ -1,18 +1,18 @@
 'use strict'
 
 const images = {
-  roadOnGrass:"pic/place/roadOnGrass.png",
-  hero:"pic/hero.png",
-  house:"pic/house.png",
-  baby_smile_male:"pic/baby-smile-male.png",
-  slime:"pic/monster/slime.png",
-  mummy:"pic/monster/mummy.png",
-  arrowRight:"pic/info/rightArrow.png",
+  roadOnGrass:"./pic/place/roadOnGrass.png",
+  hero:"./pic/hero.png",
+  house:"./pic/house.png",
+  baby_smile_male:"./pic/baby-smile-male.png",
+  slime:"./pic/monster/slime.png",
+  mummy:"./pic/monster/mummy.png",
+  arrowRight:"./pic/info/rightArrow.png",
   
-  caveEntrance:"pic/place/caveEntrance.png",
-  oldMan:"pic/oldMan.png",
-  woman_exercise:"pic/woman-exercise.png",
-  arrowReturn:"pic/info/returnArrow.png"
+  caveEntrance:"./pic/place/caveEntrance.png",
+  oldMan:"./pic/oldMan.png",
+  woman_exercise:"./pic/woman-exercise.png",
+  arrowReturn:"./pic/info/returnArrow.png"
 }
 
 function generatePromisesForPreLoad(){
