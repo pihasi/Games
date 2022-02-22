@@ -1,5 +1,10 @@
 'use strict'
 
+const startScene = testMap;
+
+
+
+
 const widthCanvas = 320;
 const heightCanvas = 320;
 
@@ -10,11 +15,17 @@ var isNeedUpdate = false;
 
 var prioritySprite = null;
 
-var canvas = document.createElement('canvas');
-    document.body.appendChild(canvas);
-    canvas.width = widthCanvas;
-    canvas.height = heightCanvas;
-    startCanvasAcceptClicked();
+var canvas;
+
+function startGame(){
+  canvas = document.createElement('canvas');
+  document.body.appendChild(canvas);
+  canvas.width = widthCanvas;
+  canvas.height = heightCanvas;
+  startCanvasAcceptClicked();
+  
+  startScene.call();
+}
 
 function startCanvasAcceptClicked(){
       canvas.addEventListener("click", searchForClickedSprite);
