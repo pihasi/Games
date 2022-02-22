@@ -18,13 +18,20 @@ var prioritySprite = null;
 var canvas;
 
 function startGame(){
-  canvas = document.createElement('canvas');
-  document.body.appendChild(canvas);
-  canvas.width = widthCanvas;
-  canvas.height = heightCanvas;
-  startCanvasAcceptClicked();
+  let promisese = generatePromisesForPreLoad();
   
-  startScene.call();
+  Promise.all( promisese ).then( result => {
+    canvas = document.createElement('canvas');
+    document.body.appendChild(canvas);
+    canvas.width = widthCanvas;
+    canvas.height = heightCanvas;
+    startCanvasAcceptClicked();
+      
+    startScene.call();
+      
+  }).catch( reject => {
+    console.error(reject);
+  });
 }
 
 function startCanvasAcceptClicked(){

@@ -14,8 +14,29 @@ const images = {
   arrowReturn:"pic/info/returnArrow.png"
 }
 
-function preLoad(){
+function generatePromisesForPreLoad(){
+  let promises =[];
   
+  Object.values(images).
+    forEach( path => {
+      // console.log(path);
+      let promise = new Promise((resolve, reject) =>{
+        let img = new Image();
+      
+        img.addEventListener("load",() =>{resolve();},
+          { passive:true, once:true });
+        img.addEventListener("error",() =>{
+          reject("load error: " + path);},
+          { passive:true, once:true });
+
+        img.src = path;
+      });
+      
+      promises.push(promise);
+    });
+    
+    
+  return promises;
 }
 
 
