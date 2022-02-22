@@ -1,6 +1,7 @@
 'use strict'
 
 const images = {
+  roadOnGrass:"pic/place/roadOnGrass.png",
   hero:"pic/hero.png",
   house:"pic/house.png",
   baby_smile_male:"pic/baby-smile-male.png",
@@ -44,7 +45,7 @@ function testMap(){
   isNeedUpdate = false;
   resetScene();
 
-  setBackGround("pic/place/roadOnGrass.png");
+  setBackGround(images.roadOnGrass);
 
 
   const protagonist = new Sprite(images.hero);
