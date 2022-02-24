@@ -73,7 +73,8 @@ class testMap extends createScene{
     
     addSimpleCharacter(images.house,
       64*2, 0,
-      "僕は家だよ！！！");
+      ["僕は家だよ！！！",
+      "入らないでね。\n絶対だよ？"]);
   
     addSimpleCharacter(images.baby_smile_male,
       64*2, 64*2,

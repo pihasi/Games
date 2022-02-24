@@ -3,12 +3,26 @@
 class MessageWindow {
 
   constructor(txt, targetSprite, action=()=>{}) {
+    this.txt = txt;
+    this.currentTxtIdx = 0;
     this.targetSprite = targetSprite;
     this.action = action;
     
     this.preCanvas = document.createElement('canvas');
     this.preCanvas.width = canvas.width;
     this.preCanvas.height = canvas.height / 3;
+    
+    this.drawWindow();
+  }
+  
+  drawWindow(){
+    let txt;
+    if( Array.isArray(this.txt) ){
+      txt = this.txt[this.currentTxtIdx];
+      this.currentTxtIdx++;
+    } else{
+      txt = this.txt;
+    }
     
     const preCtx = this.preCanvas.getContext('2d');
 
@@ -70,11 +84,15 @@ class MessageWindow {
   }
   
   clicked(){
-    prioritySprite = null;
-    
-    this.action.call();
+    if( Array.isArray(this.txt)
+      && (this.currentTxtIdx < this.txt.length) ){
+        this.drawWindow();
+    } else {
+        prioritySprite = null;
+        
+        this.action.call();
+    }
   }
-
 }
 
 
