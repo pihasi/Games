@@ -14,6 +14,11 @@ class Sprite {
       this.action = action;
   }
   
+  setxy(x, y){
+    this.setx(x);
+    this.sety(y);
+  }
+  
   setx(x){
     this.x = x;
   }

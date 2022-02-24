@@ -15,12 +15,14 @@ const images = {
   caveEntrance:"./pic/place/caveEntrance.png",
   oldMan:"./pic/oldMan.png",
   woman_exercise:"./pic/woman-exercise.png",
-  arrowReturn:"./pic/info/returnArrow.png"
+  arrowReturn:"./pic/info/returnArrow.png",
+  
+  ghost:"./pic/monster/ghost.png"
 }
 
 
 
-function generatePromisesForPreLoad(){
+function createPromisesForPreLoad(){
   let promises =[];
   
   Object.values(images).forEach( path => {
@@ -48,7 +50,6 @@ function generatePromisesForPreLoad(){
 
 
 class createScene {
-  
   constructor(backGround){
     destructCurrentScene();
     
@@ -82,11 +83,11 @@ class testMap extends createScene{
       0, 64,
       "ぷよーん\nぷよよよ〜ん\nぼよよーーん！");
   
-    const mummy = new Sprite(images.mummy,
-      64*3, 64*4, function(){
+    addSprite( new Sprite(
+      images.mummy, 64*3, 64*4, function(){
         let txt;
-        if(! playData.checkDurGame("gaveWaterToMummy", true)  ) {
-            if(! playData.checkDurGame("gotWater", true) ) {
+        if(! playData.checkDurGame("gaveWaterToMummy")){
+          if(! playData.checkDurGame("gotWater") ){
             	txt =
                 "洞窟に水忘れちゃったなー\n" +
                 "誰か取ってきてくれないかなー\n" +
@@ -104,8 +105,7 @@ class testMap extends createScene{
         }
         
         showMessageWindow(txt, this);
-      });
-    addSprite(mummy);
+    }));
     
       
     const arrowRight
@@ -164,20 +164,21 @@ class caveEntrance extends createScene{
 
 
 class insideCave extends createScene{
-
   constructor(){
     super(null);
     
     addSprite(new Sprite(
-      images.arrowReturn, 64*2, 64*4, function(){
-      let scene = new caveEntrance();
-      scene.start();
+      images.arrowReturn,
+      64*2, 64*4, function(){
+        let scene = new caveEntrance();
+        scene.start();
     }));
       
     addSprite(new Sprite(
-      images.man_walk, 64*3, 64*2, function(){
+      images.man_walk,
+      64*3, 64*2, function(){
         let txt;
-        if(! playData.checkDurGame("gotWater", true) ){
+        if(! playData.checkDurGame("gotWater") ){
           txt = "あそこのミイラが怖いよー";
         } else{
           txt ="なんだミイラって結構弱いんだな\n" +
@@ -187,9 +188,10 @@ class insideCave extends createScene{
     }));
     
     addSprite(new Sprite(
-      images.mummy, 64*1, 64*0, function(){
+      images.mummy,
+      64*1, 64*0, function(){
         let txt;
-        if (!playData.checkDurGame("gotWater", true)) {
+        if (! playData.checkDurGame("gotWater") ){
           txt = "何をする！俺が見つけた水だぞ！\n" +
             "うぎゃー！ ひ、干からb...";
           
@@ -200,5 +202,20 @@ class insideCave extends createScene{
         }
         showMessageWindow(txt, this);
     }));
+    
+    addSprite( new Sprite(
+      images.ghost,
+      64*4, 0, function(){
+        showMessageWindow("ひっひっひっひ", this);
+        killSprite(this);
+      }));
+    
+    addSprite(new Sprite(
+      images.ghost,
+      64*0.5, 64*3.5,
+      function() {
+        showMessageWindow("ふっふっふっふ", this);
+        killSprite(this);
+      }));
   }
 }

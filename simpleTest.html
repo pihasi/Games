@@ -20,62 +20,13 @@
 </head>
 <body>
 	<script>
-	  const playData = {
-	    oneScene:{
-	      asdf:4545,
-	      ghjk:true,
-	      check(nameProperty, val){
-	        return playData.check(this, nameProperty, val);
-	      }
-	    },
-	    wholeGame:{
-	      check(nameProperty, val){
-	        return playData.check(this, nameProperty, val);
-	      }
-	    },
-	    
-  	  check(obj, nameProperty, val){
-  	    if( (obj.hasOwnProperty(nameProperty)) 
-          && (obj[nameProperty] == val) ){
-	          return true;
-	      }
-	      
-	      return false;
-	    },
-	    
-	    testMethod(eee){
-	      let a = 2;
-	      a++;
-	      console.log(this);
-	      console.log(a);
-	      
-	      return true;
-	    },
-	    
-	    
-	    
-	    get aaa(){
-	      return 777;
-	    },
-	    
-	    set bbb(val){
-	      this.ttt = val*2;
-	    },
-	    
-	    actions:function(){console.log("actions")}
-	  };
-	  playData.oneScene.gotWater = true;
-	 console.log(playData.oneScene.check("gotWater", true));
-	  
-	  
-	 //playData.actions.call();
-	  //console.log(playData.testMethod(455));
-	  
-	  
+	  var array1 = [10, 20, 30, 40, 50];
+	  var target = 30;
+	  array1.some(function(v, i){
+	    if (v==target) array1.splice(i,1);    
+    });
 
-
-
-
+    console.log(array1) //=> [10, 20, 40, 50];
 	</script>
 </body>
 </html>

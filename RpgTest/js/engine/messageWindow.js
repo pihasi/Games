@@ -2,8 +2,9 @@
 
 class MessageWindow {
 
-  constructor(txt, targetSprite, fontSize = 20) {
+  constructor(txt, targetSprite, action=()=>{}) {
     this.targetSprite = targetSprite;
+    this.action = action;
     
     this.preCanvas = document.createElement('canvas');
     this.preCanvas.width = canvas.width;
@@ -53,11 +54,15 @@ class MessageWindow {
   
   clicked(){
     prioritySprite = null;
+    
+    this.action.call();
   }
 
 }
 
 
-function showMessageWindow(txt, spriteSaying){
-  prioritySprite = new MessageWindow(txt ,spriteSaying);
+function showMessageWindow
+  (txt, spriteSaying, action=()=>{}){
+    prioritySprite
+      = new MessageWindow(txt, spriteSaying, action);
 }

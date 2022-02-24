@@ -1,26 +1,28 @@
 'use strict'
 
-// const startScene = new testMapClass(); //testMap;
-
 const widthCanvas = 320;
 const heightCanvas = 320;
+
+const fontSize = 20;
+
+
 
 const playData = {
   oneScene:{},
   
   durGame:{},
   
-  checkOneScene(nameProperty, val){
+  checkOneScene(nameProperty, val=null){
     return playData.check(playData.oneScene, nameProperty, val);
   },
   
-  checkDurGame(nameProperty, val){
+  checkDurGame(nameProperty, val=null){
     return playData.check(playData.durGame, nameProperty, val);
   },
 
   check(obj, nameProperty, val){
-    if( (obj.hasOwnProperty(nameProperty)) 
-      && (obj[nameProperty] == val) ){
+    if( (obj.hasOwnProperty(nameProperty))
+      && ( (val==null) || (obj[nameProperty] == val) )){
         return true;
 	  }
 	  
@@ -40,7 +42,7 @@ var isNeedUpdate = false;
 
 
 function startGame(){
-  let promisese = generatePromisesForPreLoad();
+  let promisese = createPromisesForPreLoad();
   
   Promise.all( promisese ).then( result => {
     canvas = document.createElement('canvas');
@@ -49,9 +51,8 @@ function startGame(){
     canvas.height = heightCanvas;
     startCanvasAcceptClicked();
       
-    // startScene.call();
-    let startScene = new testMap();
-    startScene.start();
+    let firstScene = new testMap();
+    firstScene.start();
       
   }).catch( reject => {
     console.error(reject);
@@ -84,7 +85,12 @@ function addSimpleCharacter(pic, x, y, dialogue){
   });
   addSprite(sprite);
 }
-  
+
+function killSprite(target){
+  sprits.some( function(sprite, idx){
+	  if (sprite === target) sprits.splice(idx,1);
+  });
+}
 
 
 function destructCurrentScene(){
@@ -101,7 +107,7 @@ function killAllSprits(){
 
   
 function searchForClickedSprite(e){
-  console.log("click X:" + e.pageX + " Y:" + e.pageY);
+  // console.log("click X:" + e.pageX + " Y:" + e.pageY);
   
   if(prioritySprite == null){
     	  let clickX = e.pageX;
