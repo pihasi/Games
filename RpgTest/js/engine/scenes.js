@@ -184,7 +184,7 @@ class insideCave extends createScene{
           txt ="なんだミイラって結構弱いんだな\n" +
             "俺でも倒せそう";
         }
-        showMessageWindow(txt, this);
+        showMessageWindow(txt, this, ()=>{}, 2);
     }));
     
     addSprite(new Sprite(

@@ -30,18 +30,35 @@ class MessageWindow {
     }
   }
   
+  setWindowPosMode(posMode){
+    this.posMode = posMode;
+    
+    // 1:常に上側
+    // 2:常に下側
+    // 上記以外:呼び出し元スプライトの位置に応じて変える
+  }
+  
 
   update(canvas) {
     this.render(canvas);
   }
   
   render(canvas) {
+    if((! this.hasOwnProperty("posMode"))
+      || ((this.posMode != 1) && (this.posMode != 2))){
+        let targetY = this.targetSprite.y;
+        if(targetY > this.preCanvas.height + 16){
+          this.posMode = 1;
+        } else {
+          this.posMode = 2;
+        }
+      }
+    
     let dy;
-    let targetY = this.targetSprite.y;
-    if(targetY < this.preCanvas.height + 16){
-      dy = canvas.height - this.preCanvas.height;
-    } else {
+    if(this.posMode == 1){
       dy = 0;
+    } else {
+      dy = canvas.height - this.preCanvas.height;
     }
 
     const ctx = canvas.getContext('2d');
@@ -62,7 +79,9 @@ class MessageWindow {
 
 
 function showMessageWindow
-  (txt, spriteSaying, action=()=>{}){
-    prioritySprite
-      = new MessageWindow(txt, spriteSaying, action);
+  (txt, spriteSaying, action=()=>{}, posMode=0){
+    let mes = new MessageWindow(txt, spriteSaying, action);
+    mes.setWindowPosMode(posMode);
+    
+    prioritySprite = mes;
 }
