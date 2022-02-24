@@ -1,12 +1,35 @@
 'use strict'
 
-const startScene = testMap;
+// const startScene = new testMapClass(); //testMap;
 
 const widthCanvas = 320;
 const heightCanvas = 320;
 
+const playData = {
+  oneScene:{},
+  
+  durGame:{},
+  
+  checkOneScene(nameProperty, val){
+    return playData.check(playData.oneScene, nameProperty, val);
+  },
+  
+  checkDurGame(nameProperty, val){
+    return playData.check(playData.durGame, nameProperty, val);
+  },
 
-
+  check(obj, nameProperty, val){
+    if( (obj.hasOwnProperty(nameProperty)) 
+      && (obj[nameProperty] == val) ){
+        return true;
+	  }
+	  
+    return false;
+  }
+};
+	    
+	    
+	    
 var sprits = [];
 var prioritySprite = null;
 var backGround = null;
@@ -26,7 +49,9 @@ function startGame(){
     canvas.height = heightCanvas;
     startCanvasAcceptClicked();
       
-    startScene.call();
+    // startScene.call();
+    let startScene = new testMap();
+    startScene.start();
       
   }).catch( reject => {
     console.error(reject);
@@ -62,7 +87,8 @@ function addSimpleCharacter(pic, x, y, dialogue){
   
 
 
-function resetScene(){
+function destructCurrentScene(){
+  isNeedUpdate = false;
   killAllSprits();
   setBackGround(null);
   
@@ -75,6 +101,8 @@ function killAllSprits(){
 
   
 function searchForClickedSprite(e){
+  console.log("click X:" + e.pageX + " Y:" + e.pageY);
+  
   if(prioritySprite == null){
     	  let clickX = e.pageX;
     	  let clickY = e.pageY;

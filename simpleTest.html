@@ -20,15 +20,39 @@
 </head>
 <body>
 	<script>
-	  var playData = {
-	    oneScene:{},
-	    wholeGame:{},
-	    testMethod(){
+	  const playData = {
+	    oneScene:{
+	      asdf:4545,
+	      ghjk:true,
+	      check(nameProperty, val){
+	        return playData.check(this, nameProperty, val);
+	      }
+	    },
+	    wholeGame:{
+	      check(nameProperty, val){
+	        return playData.check(this, nameProperty, val);
+	      }
+	    },
+	    
+  	  check(obj, nameProperty, val){
+  	    if( (obj.hasOwnProperty(nameProperty)) 
+          && (obj[nameProperty] == val) ){
+	          return true;
+	      }
+	      
+	      return false;
+	    },
+	    
+	    testMethod(eee){
 	      let a = 2;
 	      a++;
 	      console.log(this);
 	      console.log(a);
+	      
+	      return true;
 	    },
+	    
+	    
 	    
 	    get aaa(){
 	      return 777;
@@ -36,17 +60,22 @@
 	    
 	    set bbb(val){
 	      this.ttt = val*2;
-	    }
+	    },
+	    
+	    actions:function(){console.log("actions")}
 	  };
-	  playData.flg = 2;
-	  playData.oneScene.ert ="34567";
+	  playData.oneScene.gotWater = true;
+	 console.log(playData.oneScene.check("gotWater", true));
 	  
 	  
-	  const key = "baby_x";
-	  playData.oneScene[key] = 20;
+	 //playData.actions.call();
+	  //console.log(playData.testMethod(455));
 	  
-	  playData.bbb = 11;
-	  console.log(playData.ttt);
+	  
+
+
+
+
 	</script>
 </body>
 </html>

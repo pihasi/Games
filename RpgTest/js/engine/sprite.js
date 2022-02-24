@@ -3,8 +3,7 @@
 class Sprite {
 
   constructor(img,
-    x=0, y=0, width=64, height=64,
-    action=[]) {
+    x=0, y=0, action=()=>{}, width=64, height=64) {
       this.img = new Image();
       this.img.src = img;
       this.x = x;
@@ -12,7 +11,7 @@ class Sprite {
       this.width = width || 64; 
       this.height = height || 64;
       
-      this.actions = action;
+      this.action = action;
   }
   
   setx(x){
@@ -24,7 +23,7 @@ class Sprite {
   }
   
   addAction(action){
-    this.actions.push(action);
+    this.action = action;
   }
 
 
@@ -44,8 +43,6 @@ class Sprite {
   }
   
   clicked(){
-    for(let i=0; i<this.actions.length; i++){
-      this.actions[i].call(this);
-    }
+    this.action.call(this);
   }
 }
