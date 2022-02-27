@@ -3,9 +3,9 @@
 class Sprite {
 
   constructor(img,
-    xInit=0, yInit=0, action=()=>{}
-    ,moving=()=>{}, moveArg={}
-    ,width=64, height=64) {
+    xInit=0, yInit=0, clickedAction=()=>{},
+    data={}, action=()=>{},
+    width=64, height=64) {
       this.img = new Image();
       this.img.src = img;
       this.xInit = xInit;
@@ -15,10 +15,9 @@ class Sprite {
       this.width = width || 64; 
       this.height = height || 64;
       
+      this.clickedAction = clickedAction;
+      this.data = data;
       this.action = action;
-      
-      this.moving = moving;
-      this.moveArg = moveArg;
   }
   
   setxy(x, y){
@@ -42,18 +41,22 @@ class Sprite {
     return this.yInit + this.yOffset;
   }
   
-  addAction(action){
+  setClickedAction(clickedAction){
+    this.clickedAction = clickedAction;
+  }
+
+  setAction(action){
     this.action = action;
   }
 
 
   update(canvas) {
-    this.move();
+    this.doing();
     this.render(canvas);
   }
   
-  move(){
-    this.moving.call(this);
+  doing(){
+    this.action.call(this);
   }
 
   render(canvas) {
@@ -68,6 +71,6 @@ class Sprite {
   }
   
   clicked(clickX, clickY){
-    this.action.call(this);
+    this.clickedAction.call(this, clickX, clickY);
   }
 }

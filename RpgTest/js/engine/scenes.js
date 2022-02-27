@@ -88,31 +88,6 @@ class testMap extends createScene{
            "凄いでしょ。"]
         );
       },
-      function(){
-        let param = this.moveArg;
-        let motion = param.motions[param.idxMotion]
-        
-        let elapsedTime = param.elapsedTime;
-        if(elapsedTime < param.period){
-          this.xOffset
-            = motion.x *(elapsedTime/param.period);
-          this.yOffset
-            = motion.y *(elapsedTime/param.period);
-        } else {
-          this.xInit += motion.x;
-          this.yInit += motion.y;
-
-          this.xOffset = 0;
-          this.yOffset = 0;
-          
-          param.idxMotion++
-          if(!(param.idxMotion < param.motions.length))
-            { param.idxMotion = 0 }
-          
-          param.periodStartTime = Date.now();
-        }
-        
-      },
       {
         motions:[
           {x:-100, y:0},
@@ -135,6 +110,30 @@ class testMap extends createScene{
         
         set periodStartTime(val){
           this._periodStartTime = val;
+        }
+      },
+      function(){
+        let param = this.data;
+        let motion = param.motions[param.idxMotion]
+        
+        let elapsedTime = param.elapsedTime;
+        if(elapsedTime < param.period){
+          this.xOffset
+            = motion.x *(elapsedTime/param.period);
+          this.yOffset
+            = motion.y *(elapsedTime/param.period);
+        } else {
+          this.xInit += motion.x;
+          this.yInit += motion.y;
+
+          this.xOffset = 0;
+          this.yOffset = 0;
+          
+          param.idxMotion++
+          if(!(param.idxMotion < param.motions.length))
+            { param.idxMotion = 0 }
+          
+          param.periodStartTime = Date.now();
         }
       }
     ));
