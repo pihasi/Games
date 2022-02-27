@@ -47,7 +47,7 @@ class Sprite {
     );
   }
   
-  clicked(){
+  clicked(clickX, clickY){
     this.action.call(this);
   }
 }

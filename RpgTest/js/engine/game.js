@@ -3,7 +3,13 @@
 const widthCanvas = 320;
 const heightCanvas = 320;
 
-const fontSize = 20;
+const windowFontSize = 20;
+const windowFont = windowFontSize +"px 'ＭＳ ゴシック'";
+
+const windowMarginX = 5;
+const windowMarginY = 5;
+
+const choicesTxtsGap = 10;
 
 
 
@@ -76,15 +82,6 @@ function addSprite(sprite) {
     sprits.push(sprite);
   }
 
-function addSimpleCharacter(pic, x, y, dialogue){
-  const sprite = new Sprite(pic);
-  sprite.setx(x);
-  sprite.sety(y);
-  sprite.addAction( function(){
-    showMessageWindow(dialogue, this)
-  });
-  addSprite(sprite);
-}
 
 function killSprite(target){
   sprits.some( function(sprite, idx){
@@ -107,12 +104,11 @@ function killAllSprits(){
 
   
 function searchForClickedSprite(e){
-  // console.log("click X:" + e.pageX + " Y:" + e.pageY);
-  
+  let clickX = e.pageX;
+  let clickY = e.pageY;
+//console.log("click X:" + e.pageX + " Y:" + e.pageY);
+
   if(prioritySprite == null){
-    	  let clickX = e.pageX;
-    	  let clickY = e.pageY;
-    	  
         for (let i = 0; i < sprits.length; i++) {
           let spriteX = sprits[i].x;
           if(clickX < spriteX) continue;
@@ -126,11 +122,11 @@ function searchForClickedSprite(e){
           let spriteH = sprits[i].height;
           if(clickY > spriteY + spriteH) continue;
           
-          sprits[i].clicked();
+          sprits[i].clicked(clickX, clickY);
           break;
         }
   } else {
-    prioritySprite.clicked();
+    prioritySprite.clicked(clickX, clickY);
   }
 }
     

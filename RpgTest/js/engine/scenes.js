@@ -2,6 +2,8 @@
 
 const images = {
   arrowUp:"./pic/info/upArrow.png",
+  arrowLeft:"./pic/info/leftArrow.png",
+
   
   roadOnGrass:"./pic/place/roadOnGrass.png",
   hero:"./pic/hero.png",
@@ -71,53 +73,98 @@ class testMap extends createScene{
     protagonist.sety(64*4);
     addSprite(protagonist);
     
-    addSimpleCharacter(images.house,
-      64*2, 0,
-      ["僕は家だよ！！！",
-      "入らないでね。\n絶対だよ？"]);
+    addSprite( new Sprite(
+      images.house, 64*2, 0,
+      function(){
+        showMessage(this, 
+          ["僕は家だよ！！！",
+           "入らないでね。\n絶対だよ？"]
+        );
+      }
+    ));
   
-    addSimpleCharacter(images.baby_smile_male,
-      64*2, 64*2,
-      "我輩は赤ちゃんである。\n名前はまだない");
+    addSprite( new Sprite(
+      images.baby_smile_male, 64*2, 64*2,
+      function(){
+        showMessage(this,
+          "我輩は赤ちゃんである。\n名前はまだない");
+      }
+    ));
   
-    addSimpleCharacter(images.slime,
-      0, 64,
-      "ぷよーん\nぷよよよ〜ん\nぼよよーーん！");
+    addSprite(new Sprite(
+      images.slime, 0, 64,
+      function(){
+        showMessage(this,
+          "ぷよーん\nぷよよよ〜ん\nぼよよーーん！",
+          0, ["殴る", "蹴る", "何もしない"],
+          function(selected){
+            switch (selected) {
+            	case 0:
+            	  showMessage(this, "ぴえーん！\n"
+            	  + "殴るなんてひどいいいいぃ！");
+            		break;
+            	case 1:
+            	  showMessage(this,
+            	    "蹴るんじゃねええええ！\n"
+            	    + "ぐあああああああ！！！！");
+            		break;
+            	default:
+            }
+          }
+        );
+    }));
   
     addSprite( new Sprite(
       images.mummy, 64*3, 64*4, function(){
-        let txt;
-        if(! playData.checkDurGame("gaveWaterToMummy")){
-          if(! playData.checkDurGame("gotWater") ){
-            	txt =
-                "洞窟に水忘れちゃったなー\n" +
-                "誰か取ってきてくれないかなー\n" +
-                "干からびそうなんだよなー";
-            } else {
-              txt =
-                "洞窟に水忘れちゃったなー\n" +
-                "誰か取ってk...\n" +
-                "それ俺の水じゃん！ありがと！";
-              
-              playData.durGame.gaveWaterToMummy = true;
-            }
+        if(playData.checkDurGame(
+        "gaveWaterToMummy", true)){
+          showMessage(this,
+            "水飲んでも干からびそうなう");
+        } else if(playData.checkDurGame(
+        "gaveWaterToMummy", false)){
+          showMessage(this, "へんじがない。\n" +
+            "ただの　しかばね　のようだ。");
         } else {
-          txt =  "水飲んでも干からびそうなう";
+          if(! playData.checkDurGame("gotWater") ){
+            showMessage(this,
+              "洞窟に水忘れちゃったなー\n"
+              + "誰か取ってきてくれないかなー\n"
+              + "干からびそうなんだよなー");
+          } else {
+            showMessage(this,
+              "洞窟に水忘れちゃったなー\n"
+              + "誰か取ってk...\n"
+              + "それ俺の水じゃん！", 0,
+              ["渡す", "イッキ飲み"],
+              function(selected){
+                switch(selected){
+                  case 0:
+                    showMessage(this,
+                      "ありがと〜\nこれで潤う！");
+                    playData.durGame.gaveWaterToMummy = true;
+                    break;
+                  default:
+                    showMessage(this,
+                      "なんでいきなり飲むんだよ！\n"
+                      +"俺の水だぞ！！！\n"
+                      +"うぎゃー！ひ、干からb...");
+                    playData.durGame.gaveWaterToMummy
+                      = false;
+                }
+              });
+          }
         }
-        
-        showMessageWindow(txt, this);
-    }));
+      }
+    ));
     
       
-    const arrowRight
-      = new Sprite(images.arrowRight);
-    arrowRight.setx(64*4);
-    arrowRight.sety(64);
-    arrowRight.addAction(() => {
-      let scene = new caveEntrance();
-      scene.start();
-    });
-    addSprite(arrowRight);
+    addSprite( new Sprite(
+      images.arrowRight, 64*4, 64,
+      function(){
+        let scene = new caveEntrance();
+        scene.start();
+      }
+    ));
   }
 }
 
@@ -133,32 +180,36 @@ class caveEntrance extends createScene{
     addSprite(protagonist);
     
     
-    addSimpleCharacter(images.oldMan,
-      64*3, 64*4,
-      "入らない方がいいぞよ");
+    addSprite( new Sprite(
+      images.oldMan, 64*3, 64*4,
+      function(){
+        showMessage(this, "入らない方がいいぞよ");
+      }
+    ));
   
   
-    addSimpleCharacter(images.woman_exercise,
-      64*1, 64*4,
-      "わぁ！超楽しそうな洞窟！！");
+    addSprite( new Sprite(
+      images.woman_exercise, 64*1, 64*4,
+      function(){
+        showMessage(this,"わぁ！超楽しそうな洞窟！！");
+      }
+    ));
   
-  
-    const arrowReturn
-      = new Sprite(images.arrowReturn);
-    arrowReturn.setx(0);
-    arrowReturn.sety(64);
-    arrowReturn.addAction( () => {
-      let scene = new testMap();
-      scene.start();
-    });
-    addSprite(arrowReturn);
+    addSprite( new Sprite(
+      images.arrowLeft, 0, 64,
+      function(){
+        let scene = new testMap();
+        scene.start();
+      }
+    ));
     
-    
-    addSprite(new Sprite(
-      images.arrowUp, 64*2, 64*2.5, () => {
+    addSprite( new Sprite(
+      images.arrowUp, 64*2, 64*2.5,
+      function(){
         let scene = new insideCave();
         scene.start();
-    }));
+      }
+    ));
   }
 }
 
@@ -168,16 +219,18 @@ class insideCave extends createScene{
   constructor(){
     super(null);
     
-    addSprite(new Sprite(
+    addSprite( new Sprite(
       images.arrowReturn,
-      64*2, 64*4, function(){
+      64*2, 64*4,
+      function(){
         let scene = new caveEntrance();
         scene.start();
-    }));
+      }
+    ));
       
-    addSprite(new Sprite(
-      images.man_walk,
-      64*3, 64*2, function(){
+    addSprite( new Sprite(
+      images.man_walk, 64*3, 64*2,
+      function(){
         let txt;
         if(! playData.checkDurGame("gotWater") ){
           txt = "あそこのミイラが怖いよー";
@@ -185,38 +238,57 @@ class insideCave extends createScene{
           txt ="なんだミイラって結構弱いんだな\n" +
             "俺でも倒せそう";
         }
-        showMessageWindow(txt, this, ()=>{}, 2);
-    }));
+        showMessage(this, txt, 2);
+      }
+    ));
     
     addSprite(new Sprite(
-      images.mummy,
-      64*1, 64*0, function(){
-        let txt;
+      images.mummy, 64*1, 64*0,
+      function(){
         if (! playData.checkDurGame("gotWater") ){
-          txt = "何をする！俺が見つけた水だぞ！\n" +
-            "うぎゃー！ ひ、干からb...";
-          
-          playData.durGame.gotWater = true;
+          showMessage(this,
+            "ねんがんの　水をてにいれたぞ！", 0, 
+　　        ["そう　かんけいないね",
+             "殺してでも　うばいとる",
+             "ゆずってくれ　たのむ！！"],
+            function(selected){
+              switch(selected){
+                case 0:
+                  break;
+                case 1:
+                  showMessage(this,
+                    "な　なにをする　きさまー！");
+                  playData.durGame.gotWater = true;
+                  break;
+                default:
+                  showMessage(this,
+                    "だめだ！！　いくらつまれても\n"+
+                    "ゆずれん");
+              }
+            }
+          );
         } else {
-          txt = "返事がない。\n" +
-            "ただの屍のようだ。";
+          showMessage(this, "へんじがない。\n" +
+            "ただの　しかばね　のようだ。");
         }
-        showMessageWindow(txt, this);
-    }));
+      }
+    ));
     
     addSprite( new Sprite(
-      images.ghost,
-      64*4, 0, function(){
-        showMessageWindow("ひっひっひっひ", this);
+      images.ghost, 64*4, 0,
+      function(){
+        showMessage(this, "ひっひっひっひ");
         killSprite(this);
-      }));
+      }
+    ));
     
-    addSprite(new Sprite(
-      images.ghost,
-      64*0.5, 64*3.5,
+    addSprite( new Sprite(
+      images.ghost, 64*0.5, 64*3.5,
       function() {
-        showMessageWindow("ふっふっふっふ", this);
+        showMessage(this, "ふっふっふっふ");
         killSprite(this);
-      }));
+      }
+    ));
   }
 }
+
