@@ -6,6 +6,10 @@ const heightCanvas = 320;
 const windowFontSize = 20;
 const windowFont = windowFontSize +"px 'ＭＳ ゴシック'";
 
+const windowBack = 'black';
+const windowLine = 'grey'
+const messageColor = "white";
+
 const windowMarginX = 5;
 const windowMarginY = 5;
 
@@ -105,7 +109,7 @@ function killAllSprits(){
 function searchForClickedSprite(e){
   let clickX = e.pageX;
   let clickY = e.pageY;
-//console.log("click X:" + e.pageX + " Y:" + e.pageY);
+//console.log("click X:" + clickX + " Y:" + clickY);
 
   if(prioritySprite == null){
         for (let i = 0; i < sprits.length; i++) {

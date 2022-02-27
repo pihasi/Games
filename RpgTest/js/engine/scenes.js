@@ -81,12 +81,61 @@ class testMap extends createScene{
     addSprite(protagonist);
     
     addSprite( new Sprite(
-      images.house, 64*2, 0,
-      function(){
+      images.house, 64*3, 64*0.5
+      ,function(){
         showMessage(this, 
-          ["僕は家だよ！！！",
-           "入らないでね。\n絶対だよ？"]
+          ["僕は世にも珍しい\n動ける家だよ。",
+           "凄いでしょ。"]
         );
+      },
+      function(){
+        let param = this.moveArg;
+        let motion = param.motions[param.idxMotion]
+        
+        let elapsedTime = param.elapsedTime;
+        if(elapsedTime < param.period){
+          this.xOffset
+            = motion.x *(elapsedTime/param.period);
+          this.yOffset
+            = motion.y *(elapsedTime/param.period);
+        } else {
+          this.xInit += motion.x;
+          this.yInit += motion.y;
+
+          this.xOffset = 0;
+          this.yOffset = 0;
+          
+          param.idxMotion++
+          if(!(param.idxMotion < param.motions.length))
+            { param.idxMotion = 0 }
+          
+          param.periodStartTime = Date.now();
+        }
+        
+      },
+      {
+        motions:[
+          {x:-100, y:0},
+          {x:100, y:0}
+        ],
+        period:1500,
+        idxMotion:0,
+
+        get periodStartTime(){
+          if(! this.hasOwnProperty("_periodStartTime")){
+          this._periodStartTime = Date.now();
+          }
+    
+          return this._periodStartTime;
+        },
+        
+        get elapsedTime(){
+          return Date.now() - this.periodStartTime;
+        },
+        
+        set periodStartTime(val){
+          this._periodStartTime = val;
+        }
       }
     ));
   
@@ -102,7 +151,7 @@ class testMap extends createScene{
       images.slime, 0, 64,
       function(){
         showMessage(this,
-          "ぷよーん\nぷよよよ〜ん\nぼよよーーん！",
+          "ぷよーん\nぷよーん\nぷよよよ〜ん\nぼよよーーん！",
           0, ["殴る", "蹴る", "何もしない"],
           function(selected){
             switch (selected) {
@@ -149,7 +198,8 @@ class testMap extends createScene{
                   case 0:
                     showMessage(this,
                       "ありがと〜\nこれで潤う！");
-                    playData.durGame.gaveWaterToMummy = true;
+                    playData.durGame.gaveWaterToMummy
+                      = true;
                     break;
                   default:
                     showMessage(this,

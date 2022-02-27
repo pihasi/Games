@@ -26,7 +26,9 @@ class MessageWindow {
     
     this.mesCanvas = document.createElement('canvas');
     this.mesCanvas.width = canvas.width;
-    this.mesCanvas.height = canvas.height / 3;
+    this.mesCanvas.height
+      = windowFontSize * 4 + windowMarginY * 2;
+    //canvas.height / 3;
     
     
     this.drawMessage();
@@ -153,15 +155,14 @@ class MessageWindow {
   
   drawTxt(txtCanvas, txt, txtsGapY=0){
     const preCtx = txtCanvas.getContext('2d');
-
-    preCtx.fillStyle = 'black'; 
+    preCtx.fillStyle = windowBack;
     preCtx.fillRect(0, 0, txtCanvas.width, txtCanvas.height);
 
-    preCtx.strokeStyle = 'white';
+    preCtx.strokeStyle = windowLine;
     preCtx.lineWidth = 4;
     preCtx.strokeRect(0, 0, txtCanvas.width, txtCanvas.height);
 
-    preCtx.fillStyle = "white";
+    preCtx.fillStyle = messageColor;
     preCtx.font = windowFont;
     preCtx.textAlign = "left";
     preCtx.textBaseline = "top";
