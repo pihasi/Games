@@ -1,25 +1,32 @@
 'use strict'
 
+function firstSceneStart(){
+  let firstScene = new testMap();
+  
+  firstScene.start();
+}
+
+
 const images = {
   arrowUp:"./pic/info/upArrow.png",
   arrowLeft:"./pic/info/leftArrow.png",
-
+  arrowRight:"./pic/info/rightArrow.png",
+  arrowReturn:"./pic/info/returnArrow.png",
   
-  roadOnGrass:"./pic/place/roadOnGrass.png",
   hero:"./pic/hero.png",
+
+  roadOnGrass:"./pic/place/roadOnGrass.png",
   house:"./pic/house.png",
   baby_smile_male:"./pic/baby-smile-male.png",
   slime:"./pic/monster/slime.png",
   mummy:"./pic/monster/mummy.png",
-  man_walk:"./pic/man-walk.png",
-  arrowRight:"./pic/info/rightArrow.png",
   
   caveEntrance:"./pic/place/caveEntrance.png",
   oldMan:"./pic/oldMan.png",
   woman_exercise:"./pic/woman-exercise.png",
-  arrowReturn:"./pic/info/returnArrow.png",
   
-  ghost:"./pic/monster/ghost.png"
+  ghost:"./pic/monster/ghost.png",
+  man_walk:"./pic/man-walk.png",
 }
 
 
@@ -87,7 +94,7 @@ class testMap extends createScene{
       images.baby_smile_male, 64*2, 64*2,
       function(){
         showMessage(this,
-          "我輩は赤ちゃんである。\n名前はまだない");
+          "我輩は赤ちゃんである。\n名前はまだ無い。");
       }
     ));
   
@@ -112,7 +119,8 @@ class testMap extends createScene{
             }
           }
         );
-    }));
+      }
+    ));
   
     addSprite( new Sprite(
       images.mummy, 64*3, 64*4, function(){
@@ -151,7 +159,8 @@ class testMap extends createScene{
                     playData.durGame.gaveWaterToMummy
                       = false;
                 }
-              });
+              }
+            );
           }
         }
       }

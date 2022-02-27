@@ -56,10 +56,9 @@ function startGame(){
     canvas.width = widthCanvas;
     canvas.height = heightCanvas;
     startCanvasAcceptClicked();
-      
-    let firstScene = new testMap();
-    firstScene.start();
-      
+    
+    firstSceneStart();
+    
   }).catch( reject => {
     console.error(reject);
   });
@@ -98,7 +97,7 @@ function destructCurrentScene(){
   canvas.getContext("2d").clearRect(0,0, canvas.width,canvas.height);
 }
 function killAllSprits(){
-  sprits =[];
+  sprits = [];
 }
 
 

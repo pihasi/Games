@@ -222,7 +222,7 @@ class MessageWindow {
       if ((clickX > conx) && (clickX < conx + conw)
       && (clickY > cony) && (clickY < cony + conh)) {
         prioritySprite = null;
-        
+      
 //        console.log(this.choices[this.userSelected]);
         
         this.choiceAct.call(
@@ -235,8 +235,7 @@ class MessageWindow {
         let h = windowFontSize + choicesTxtsGap;
 
         for(let i=0; i<this.choices.length; i++){
-          let y = this.choicesY
-            + i * (windowFontSize + choicesTxtsGap);
+          let y = this.choicesY + i * h;
           
           if ((clickX > x) && (clickX < x + w)
           && (clickY > y) && (clickY < y + h)){
