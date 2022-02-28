@@ -103,9 +103,9 @@ class Sprite {
           = destJump * Math.sin(Math.PI * phase) * (-1);
         
         this.xOffset
-          = destX *(phase);
+          = destX * phase;
         this.yOffset
-          = destY *(phase) + currentJump;
+          = destY * phase + currentJump;
       } else {
         this.xOffset = destX;
         this.yOffset = destY;
@@ -113,7 +113,6 @@ class Sprite {
         if(motion.length < 5){
           this.startMoving(this.idxMotion + 1);
         } else {
-          console.log(motion);
           let proc = motion[4];
             
           proc.call(this);
