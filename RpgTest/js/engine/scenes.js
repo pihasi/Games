@@ -103,21 +103,32 @@ class testMap extends createScene{
     ));
   
     addSprite(new Sprite(
-      images.slime, 0, 64*3,
+      images.slime, 0, 64*2.5,
       function(){
         showMessage(this,
-          "ぷよーん\nぷよーん\nぷよよよ〜ん\nぼよよーーん！",
-          0, ["殴る", "蹴る", "何もしない"],
+          "ぷよーん\nぷよーん\nぷよよ〜ん\nぼよーーん！",
+          2, ["殴る", "蹴る", "何もしない"],
           function(selected){
             switch (selected) {
             	case 0:
-            	  showMessage(this, "ぴえーん！\n"
-            	  + "殴るなんてひどいいいいぃ！");
+                showMessage(this, "ぴえーん！\n"
+            	  + "殴るなんてひどいいいいぃ！", 2);
             		break;
             	case 1:
+            	  this.clickedAction = ()=>{};
+            	  this.setMotions([
+            	    1000,
+            	    canvas.width, -canvas.height, 64,
+            	    function(){
+            	      killSprite(this);
+            	    }
+            	  ]);
+            	  this.xInit = this.x;
+            	  this.yInit = this.y;
+            	  this.startMoving();
             	  showMessage(this,
             	    "蹴るんじゃねええええ！\n"
-            	    + "ぐあああああああ！！！！");
+            	    + "ぐあああああああ！！！！", 2);
             		break;
             	default:
             }

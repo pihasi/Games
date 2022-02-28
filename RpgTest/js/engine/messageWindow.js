@@ -21,6 +21,10 @@ class MessageWindow {
     this.confirmX;
     this.confirmY;
 
+    //posMode=0:targetSpriteを隠さないYに自動調節
+    //posMode=1:常に上側
+    //posMode=2:常に下側
+
     this.posMode = posMode;
     this.mesY;
     

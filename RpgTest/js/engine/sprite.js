@@ -11,18 +11,13 @@ class Sprite {
       this.img.src = img;
       this.xInit = xInit;
       this.yInit = yInit;
-      this.xOffset = 0;
-      this.yOffset = 0;
       this.width = width || 64; 
       this.height = height || 64;
 
       this.clickedAction = clickedAction;
-
-      this.motions = motions;
-      if( this.motions.length > 0){
-        this.startMoving(0);
-      }
       
+      this.setMotions(motions);
+
       this.data = data;
   }
   
@@ -40,32 +35,45 @@ class Sprite {
   }
   
   get x(){
-    return this.xInit + this.xOffset;
+    return this.xInit + (this.xOffset || 0);
   }
   
   get y(){
-    return this.yInit + this.yOffset;
+    return this.yInit + (this.yOffset || 0);
+  }
+  
+  setMotions(motions){
+    this.motions = motions;
+    if( this.motions.length > 0){
+      
+      // motionsが配列の配列で渡されなかった時の対策
+      if(! Array.isArray(this.motions[0])){
+        this.motions = [this.motions];
+      }
+        
+      this.startMoving();
+    }
   }
   
   setClickedAction(clickedAction){
     this.clickedAction = clickedAction;
   }
 
-  setAction(action){
-    this.action = action;
-  }
-
-
   update(canvas) {
     this.moving();
     this.render(canvas);
   }
   
-  startMoving(idx){
+  startMoving(idx=0){
     if(!(idx < this.motions.length)){
       idx = 0;
     }
     this.idxMotion = idx;
+    
+    this.setxy(this.x, this.y);
+    this.xOffset = 0;
+    this.yOffset = 0;
+
     
     this.startMovingTime = Date.now();
   }
@@ -78,7 +86,6 @@ class Sprite {
       let destX = motion[1];
       let destY = motion[2];
       
-      //jump = motion[3];
       let destJump;
       if(motion.length > 3){
         destJump = motion[3];
@@ -86,9 +93,9 @@ class Sprite {
         destJump = 0;
       }
       
-      
       let elapsedTime
         = Date.now() - this.startMovingTime;
+        
       if(elapsedTime < period){
         let phase = elapsedTime / period;
         
@@ -100,15 +107,13 @@ class Sprite {
         this.yOffset
           = destY *(phase) + currentJump;
       } else {
-        this.xInit += destX;
-        this.yInit += destY;
-
-        this.xOffset = 0;
-        this.yOffset = 0;
+        this.xOffset = destX;
+        this.yOffset = destY;
         
         if(motion.length < 5){
           this.startMoving(this.idxMotion + 1);
         } else {
+          console.log(motion);
           let proc = motion[4];
             
           proc.call(this);
