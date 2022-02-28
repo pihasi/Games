@@ -79,14 +79,26 @@ class Sprite {
       let destY = motion[2];
       
       //jump = motion[3];
+      let destJump;
+      if(motion.length > 3){
+        destJump = motion[3];
+      } else {
+        destJump = 0;
+      }
+      
       
       let elapsedTime
         = Date.now() - this.startMovingTime;
       if(elapsedTime < period){
+        let phase = elapsedTime / period;
+        
+        let currentJump
+          = destJump * Math.sin(Math.PI * phase) * (-1);
+        
         this.xOffset
-          = destX *(elapsedTime/period);
+          = destX *(phase);
         this.yOffset
-          = destY *(elapsedTime/period);
+          = destY *(phase) + currentJump;
       } else {
         this.xInit += destX;
         this.yInit += destY;

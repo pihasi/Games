@@ -103,7 +103,7 @@ class testMap extends createScene{
     ));
   
     addSprite(new Sprite(
-      images.slime, 0, 64,
+      images.slime, 0, 64*3,
       function(){
         showMessage(this,
           "ぷよーん\nぷよーん\nぷよよよ〜ん\nぼよよーーん！",
@@ -121,9 +121,15 @@ class testMap extends createScene{
             		break;
             	default:
             }
-          }
+          },
         );
-      }
+      },
+      [
+        [600, 16, 0, 24],
+        [600, 16, 0, 24],
+        [600, 32, 0, 40],
+        [600, -64, 0, 64]
+      ]
     ));
   
     addSprite( new Sprite(
