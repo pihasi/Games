@@ -88,54 +88,10 @@ class testMap extends createScene{
            "凄いでしょ。"]
         );
       },
-      {
-        motions:[
-          {x:-100, y:0},
-          {x:100, y:0}
-        ],
-        period:1500,
-        idxMotion:0,
-
-        get periodStartTime(){
-          if(! this.hasOwnProperty("_periodStartTime")){
-          this._periodStartTime = Date.now();
-          }
-    
-          return this._periodStartTime;
-        },
-        
-        get elapsedTime(){
-          return Date.now() - this.periodStartTime;
-        },
-        
-        set periodStartTime(val){
-          this._periodStartTime = val;
-        }
-      },
-      function(){
-        let param = this.data;
-        let motion = param.motions[param.idxMotion]
-        
-        let elapsedTime = param.elapsedTime;
-        if(elapsedTime < param.period){
-          this.xOffset
-            = motion.x *(elapsedTime/param.period);
-          this.yOffset
-            = motion.y *(elapsedTime/param.period);
-        } else {
-          this.xInit += motion.x;
-          this.yInit += motion.y;
-
-          this.xOffset = 0;
-          this.yOffset = 0;
-          
-          param.idxMotion++
-          if(!(param.idxMotion < param.motions.length))
-            { param.idxMotion = 0 }
-          
-          param.periodStartTime = Date.now();
-        }
-      }
+      [
+        [1500, -100, 0],
+        [1500, 100, 0],
+      ]
     ));
   
     addSprite( new Sprite(
