@@ -55,8 +55,16 @@ class Sprite {
     }
   }
   
+  deleteMotions(){
+    this.motions = [];
+  }
+  
   setClickedAction(clickedAction){
     this.clickedAction = clickedAction;
+  }
+  
+  deleteClickedAction(){
+    this.clickedAction = ()=>{};
   }
 
   update(canvas) {

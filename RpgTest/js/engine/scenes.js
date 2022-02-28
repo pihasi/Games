@@ -27,6 +27,12 @@ const images = {
   
   ghost:"./pic/monster/ghost.png",
   man_walk:"./pic/man-walk.png",
+  
+  grass:"./pic/place/grass.png",
+  buildingp:"./pic/building.png",
+  building_broken:"./pic/building-broken.png",
+  canon:"./pic/canon.png",
+  missile:"./pic/monster/misile.png"
 }
 
 
@@ -194,6 +200,16 @@ class testMap extends createScene{
         scene.start();
       }
     ));
+    
+    
+    addSprite( new Sprite(
+      images.arrowLeft, 0, 64,
+      function(){
+        let scene = new grassField();
+        scene.start();
+      }
+    ));
+
   }
 }
 
@@ -321,3 +337,64 @@ class insideCave extends createScene{
   }
 }
 
+
+
+class grassField extends createScene{
+  constructor(){
+    super(images.grass);
+    
+    
+    addSprite( new Sprite(
+      images.arrowRight,
+      64*4, 64,
+      function(){
+        let scene = new testMap();
+        scene.start();
+      }
+    ));
+
+
+    let building = new Sprite(
+      images.buildingp, 0, 64 * 3,
+      ()=>{},[],{},
+      128, 128
+    );
+    addSprite( building );
+    
+    
+    addSprite( new Sprite(
+      images.canon, 64*3.75, 64*2.5,
+      function(){
+        //ミサイルをうつ処理
+        this.deleteClickedAction();
+        this.setMotions([
+          [50, -6, 0, 0],
+          [100, 12, 0, 0],
+          [100, -12, 0, 0],
+          [100, 12, 0, 0],
+          [100, -12, 0, 0],
+          [100, 12, 0, 0],
+          [100, -12, 0, 0],
+          [100, 12, 0, 0],
+          [50, -6, 0, 0, function(){
+            this.deleteMotions();
+            addSprite( new Sprite(
+              images.missile, this.x, this.y, ()=>{},
+              [
+                1000,
+                building.x - this.x + building.width * 0.25,
+                building.y - this.y + building.height * 0.25,
+                128, function(){
+                  killSprite(this);
+                  building.img.src = images.building_broken;
+                }
+              ]
+            ));
+          }]
+        ]);
+      }
+    ));
+  }
+}
+    
+    
