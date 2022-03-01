@@ -81,10 +81,9 @@ class testMap extends createScene{
   constructor(){
     super(images.roadOnGrass);
     
-    const protagonist = new Sprite(images.hero);
-    protagonist.setx(64*2);
-    protagonist.sety(64*4);
-    addSprite(protagonist);
+    addSprite( new Sprite(
+      images.hero, 64*2, 64*4
+    ));
     
     addSprite( new Sprite(
       images.house, 64*3, 64*0.5
@@ -125,8 +124,7 @@ class testMap extends createScene{
             	  this.deleteClickedAction();
             	  this.setActions([
             	    500,
-            	    canvas.width/2, -canvas.height,
-            	    function(){ this.defaultMoving(); },
+            	    canvas.width/2, -canvas.height, 0,
             	    function(){ killSprite(this); }
             	  ]);
             	  showMessage(this,
@@ -139,10 +137,10 @@ class testMap extends createScene{
         );
       },
       [
-        [600, 16, 0, function(){ this.defaultMoving(24); }],
-        [600, 16, 0, function(){ this.defaultMoving(24); }],
-        [600, 32, 0, function(){ this.defaultMoving(40); }],
-        [600, -64, 0, function(){ this.defaultMoving(64); }]
+        [600, 16, 0, 24],
+        [600, 16, 0, 24],
+        [600, 32, 0, 40],
+        [600, -64, 0, 64]
       ]
     ));
   
@@ -218,10 +216,9 @@ class caveEntrance extends createScene{
   constructor(){
     super(images.caveEntrance);
     
-    const protagonist = new Sprite(images.hero);
-    protagonist.setx(0);
-    protagonist.sety(64*3);
-    addSprite(protagonist);
+    addSprite( new Sprite(
+      images.hero, 0, 64*3
+    ));
     
     
     addSprite( new Sprite(
@@ -383,7 +380,7 @@ class grassField extends createScene{
                 1000,
                 building.centerX - this.centerX,
                 building.centerY - this.centerY,
-                function(){ this.defaultMoving(128); },
+                128,
                 function(){
                   killSprite(this);
                   building.img.src = images.building_broken;

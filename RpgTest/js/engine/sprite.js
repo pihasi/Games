@@ -12,8 +12,10 @@ class Sprite {
       
       this.xInit = xInit;
       this.yInit = yInit;
-      this.width = width || 64; 
-      this.height = height || 64;
+      this.xOffset = 0;
+      this.yOffset = 0;
+      this.width = width;
+      this.height = height;
 
       this.clickedAction = clickedAction;
       
@@ -22,25 +24,42 @@ class Sprite {
       this.data = data;
   }
   
+  
+  
   setxy(x, y){
-    this.setx(x);
-    this.sety(y);
+    this.x = x;
+    this.y = y;
   }
   
-  setx(x){
-    this.xInit = x;
+  set x(x){
+    this.xInit = x - this.xOffset;
   }
 
-  sety(y){
-    this.yInit = y;
+  set y(y){
+    this.yInit = y - this.yOffset;
   }
   
   get x(){
-    return this.xInit + (this.xOffset || 0);
+    return this.xInit + this.xOffset;
   }
   
   get y(){
-    return this.yInit + (this.yOffset || 0);
+    return this.yInit + this.yOffset;
+  }
+  
+  
+
+  setCenterXY(cx, cy){
+    this.centerX = cx;
+    this.centerY = cy;
+  }
+  
+  set centerX(cx){
+    this.setx( cx - this.width / 2 );
+  }
+  
+  set centerY(cy){
+    this.sety( cy - this.height / 2 );
   }
 
   get centerX(){
@@ -50,6 +69,8 @@ class Sprite {
   get centerY(){
     return this.y + this.height / 2;
   }
+  
+  
   
   setActions(actions){
     this.actions = actions;
@@ -63,24 +84,7 @@ class Sprite {
       this.startDoing();
     }
   }
-  
-  deleteActions(){
-    this.actions = [];
-  }
-  
-  setClickedAction(clickedAction){
-    this.clickedAction = clickedAction;
-  }
-  
-  deleteClickedAction(){
-    this.clickedAction = ()=>{};
-  }
 
-  update(canvas) {
-    this.doing();
-    this.render(canvas);
-  }
-  
   startDoing(idx=0){
     if(!(idx < this.actions.length)){
       idx = 0;
@@ -88,6 +92,7 @@ class Sprite {
     this.idxAction = idx;
 
     let action = this.actions[this.idxAction];
+    
     let currentAction = {};
     currentAction.period = action[0];
     currentAction.destX = action[1];
@@ -95,7 +100,15 @@ class Sprite {
     
     
     if( action.length > 3 ){
-      currentAction.actionFunc = action[3];
+      if( typeof action[3] == "function" ){
+        currentAction.actionFunc = action[3];
+      } else {
+        currentAction.destJump = action[3];
+        currentAction.actionFunc
+          = function(){
+              this.defaultMoving( this.currentAction.destJump );
+            };
+      }
     } else {
       currentAction.actionFunc
         = function(){ this.defaultMoving(); };
@@ -110,10 +123,12 @@ class Sprite {
     
     this.currentAction = currentAction;
     
-    this.setxy(this.x, this.y);
+    
+    this.xInit += this.xOffset;
+    this.yInit += this.yOffset;
     this.xOffset = 0;
     this.yOffset = 0;
-
+    
     this.startDoingTime = Date.now();
   }
   
@@ -132,7 +147,27 @@ class Sprite {
     this.xOffset = destX * phase;
     this.yOffset = destY * phase + currentJump;
   }
+  
+  deleteActions(){
+    this.actions = [];
+  }
+  
+  
+  
+  setClickedAction(clickedAction){
+    this.clickedAction = clickedAction;
+  }
+  
+  deleteClickedAction(){
+    this.clickedAction = ()=>{};
+  }
+  
+  
 
+  update(canvas) {
+    this.doing();
+    this.render(canvas);
+  }
   
   doing(){
     if(this.actions.length > 0){
@@ -160,6 +195,8 @@ class Sprite {
       this.x, this.y, this.width, this.height
     );
   }
+  
+  
   
   clicked(clickX, clickY){
     this.clickedAction.call(this, clickX, clickY);
