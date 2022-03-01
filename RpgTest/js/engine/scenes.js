@@ -120,15 +120,14 @@ class testMap extends createScene{
             	case 0:
                 showMessage(this, "ぴえーん！\n"
             	  + "殴るなんてひどいいいいぃ！", 2);
-            		break;
+            		break; 
             	case 1:
-            	  this.clickedAction = ()=>{};
-            	  this.setMotions([
+            	  this.deleteClickedAction();
+            	  this.setActions([
             	    500,
-            	    canvas.width/2, -canvas.height, 0,
-            	    function(){
-            	      killSprite(this);
-            	    }
+            	    canvas.width/2, -canvas.height,
+            	    function(){ this.defaultMoving(); },
+            	    function(){ killSprite(this); }
             	  ]);
             	  showMessage(this,
             	    "蹴るんじゃねええええ！\n"
@@ -140,10 +139,10 @@ class testMap extends createScene{
         );
       },
       [
-        [600, 16, 0, 24],
-        [600, 16, 0, 24],
-        [600, 32, 0, 40],
-        [600, -64, 0, 64]
+        [600, 16, 0, function(){ defaultMoving(24); }],
+        [600, 16, 0, function(){ defaultMoving(24); }],
+        [600, 32, 0, function(){ defaultMoving(40); }],
+        [600, -64, 0, function(){ defaultMoving(64); }]
       ]
     ));
   
@@ -368,14 +367,14 @@ class grassField extends createScene{
         //ミサイルをうつ処理
         this.deleteClickedAction();
         this.setMotions([
-          [50, -6, 0, 0],
-          [100, 12, 0, 0],
-          [100, -12, 0, 0],
-          [100, 12, 0, 0],
-          [100, -12, 0, 0],
-          [100, 12, 0, 0],
-          [100, -12, 0, 0],
-          [100, 12, 0, 0],
+          [50, -6, 0],
+          [100, 12, 0],
+          [100, -12, 0],
+          [100, 12, 0],
+          [100, -12, 0],
+          [100, 12, 0],
+          [100, -12, 0],
+          [100, 12, 0],
           [50, -6, 0, 0, function(){
             this.deleteMotions();
             addSprite( new Sprite(

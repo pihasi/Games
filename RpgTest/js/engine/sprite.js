@@ -5,10 +5,11 @@ class Sprite {
   constructor(
     img, xInit=0, yInit=0,
     clickedAction=()=>{},
-    motions=[], data={},
+    actions=[], data={},
     width=64, height=64) {
       this.img = new Image();
       this.img.src = img;
+      
       this.xInit = xInit;
       this.yInit = yInit;
       this.width = width || 64; 
@@ -16,7 +17,7 @@ class Sprite {
 
       this.clickedAction = clickedAction;
       
-      this.setMotions(motions);
+      this.setActions(actions);
 
       this.data = data;
   }
@@ -41,22 +42,30 @@ class Sprite {
   get y(){
     return this.yInit + (this.yOffset || 0);
   }
+
+  get centerX(){
+    return this.x + this.width / 2;
+  }
   
-  setMotions(motions){
-    this.motions = motions;
-    if( this.motions.length > 0){
+  get centerY(){
+    return this.y + this.height / 2;
+  }
+  
+  setActions(actions){
+    this.actions = actions;
+    if( this.actions.length > 0){
       
-      // motionsが配列の配列で渡されなかった時の対策
-      if(! Array.isArray(this.motions[0])){
-        this.motions = [this.motions];
+      // actionsが配列の配列で渡されなかった時の対策
+      if(! Array.isArray(this.actions[0])){
+        this.actions = [this.actions];
       }
         
-      this.startMoving();
+      this.startDoing();
     }
   }
   
-  deleteMotions(){
-    this.motions = [];
+  deleteActions(){
+    this.actions = [];
   }
   
   setClickedAction(clickedAction){
@@ -68,67 +77,63 @@ class Sprite {
   }
 
   update(canvas) {
-    this.moving();
+    this.doing();
     this.render(canvas);
   }
   
-  startMoving(idx=0){
-    if(!(idx < this.motions.length)){
+  startDoing(idx=0){
+    if(!(idx < this.actions.length)){
       idx = 0;
     }
-    this.idxMotion = idx;
+    this.idxAction = idx;
+
+    let action = this.actions[this.idxAction];
+    let currentAction = {};
+    currentAction.period = action[0];
+    currentAction.destX = action[1];
+    currentAction.destY = action[2];
+    
+    
+    if( action.length > 3 ){
+      currentAction.actionFunc = action[3];
+    } else {
+      currentAction.actionFunc
+        = function(){ defaultMoving(); };
+    }
+    
+    if( action.length > 4 ){
+      currentAction.afterFunc = action[4];
+    } else {
+      currentAction.afterFunc
+        = function(){ this.startDoing( this.idxAction + 1) };
+    }
+    
+    this.currentAction = currentAction;
     
     this.setxy(this.x, this.y);
     this.xOffset = 0;
     this.yOffset = 0;
 
-    
-    this.startMovingTime = Date.now();
+    this.startDoingTime = Date.now();
   }
   
-  moving(){
-    if(this.motions.length > 0){
-      let motion = this.motions[this.idxMotion];
-      
-      let period = motion[0];
-      let destX = motion[1];
-      let destY = motion[2];
-      
-      let destJump;
-      if(motion.length > 3){
-        destJump = motion[3];
-      } else {
-        destJump = 0;
-      }
-      
+  doing(){
+    if(this.actions.length > 0){
       let elapsedTime
-        = Date.now() - this.startMovingTime;
+        = Date.now() - this.startDoingTime;
         
-      if(elapsedTime < period){
-        let phase = elapsedTime / period;
-        
-        let currentJump
-          = destJump * Math.sin(Math.PI * phase) * (-1);
-        
-        this.xOffset
-          = destX * phase;
-        this.yOffset
-          = destY * phase + currentJump;
+      if(elapsedTime < this.currentAction.period){
+        console.log(this.img.src);
+        this.currentAction.actionFunc.call(this);
       } else {
-        this.xOffset = destX;
-        this.yOffset = destY;
+        this.xOffset = this.currentAction.destX;
+        this.yOffset = this.currentAction.destY;
         
-        if(motion.length < 5){
-          this.startMoving(this.idxMotion + 1);
-        } else {
-          let proc = motion[4];
-            
-          proc.call(this);
-        }
+        this.currentAction.afterFunc.call(this);
       }
     }
   }
-
+  
   render(canvas) {
     if (this.x < -1 * this.width || this.x > canvas.width) return;
     if (this.y < -1 * this.height || this.y > canvas.height) return;
@@ -144,3 +149,19 @@ class Sprite {
     this.clickedAction.call(this, clickX, clickY);
   }
 }
+
+function dafaultMoving( destJump=0 ){
+    let period = this.currentAction.period;
+    let destX = this.currentAction.destX;
+    let destY = this.currentAction.destY;
+    
+    let elapsedTime
+      = Date.now() - this.startMovingTime;
+    let phase = elapsedTime / period;
+    
+    let currentJump
+      = destJump * Math.sin(Math.PI * phase) * (-1);
+    
+    this.xOffset = destX * phase;
+    this.yOffset = destY * phase + currentJump;
+  }
