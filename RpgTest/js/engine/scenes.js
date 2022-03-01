@@ -139,10 +139,10 @@ class testMap extends createScene{
         );
       },
       [
-        [600, 16, 0, function(){ defaultMoving(24); }],
-        [600, 16, 0, function(){ defaultMoving(24); }],
-        [600, 32, 0, function(){ defaultMoving(40); }],
-        [600, -64, 0, function(){ defaultMoving(64); }]
+        [600, 16, 0, function(){ this.defaultMoving(24); }],
+        [600, 16, 0, function(){ this.defaultMoving(24); }],
+        [600, 32, 0, function(){ this.defaultMoving(40); }],
+        [600, -64, 0, function(){ this.defaultMoving(64); }]
       ]
     ));
   
@@ -366,7 +366,7 @@ class grassField extends createScene{
       function(){
         //ミサイルをうつ処理
         this.deleteClickedAction();
-        this.setMotions([
+        this.setActions([
           [50, -6, 0],
           [100, 12, 0],
           [100, -12, 0],
@@ -376,14 +376,15 @@ class grassField extends createScene{
           [100, -12, 0],
           [100, 12, 0],
           [50, -6, 0, 0, function(){
-            this.deleteMotions();
+            this.deleteActions();
             addSprite( new Sprite(
               images.missile, this.x, this.y, ()=>{},
               [
                 1000,
-                building.x - this.x + building.width * 0.25,
-                building.y - this.y + building.height * 0.25,
-                128, function(){
+                building.centerX - this.centerX,
+                building.centerY - this.centerY,
+                function(){ this.defaultMoving(128); },
+                function(){
                   killSprite(this);
                   building.img.src = images.building_broken;
                 }

@@ -98,7 +98,7 @@ class Sprite {
       currentAction.actionFunc = action[3];
     } else {
       currentAction.actionFunc
-        = function(){ defaultMoving(); };
+        = function(){ this.defaultMoving(); };
     }
     
     if( action.length > 4 ){
@@ -117,13 +117,29 @@ class Sprite {
     this.startDoingTime = Date.now();
   }
   
+  defaultMoving( destJump=0 ){
+    let period = this.currentAction.period;
+    let destX = this.currentAction.destX;
+    let destY = this.currentAction.destY;
+    
+    let elapsedTime
+      = Date.now() - this.startDoingTime;
+    let phase = elapsedTime / period;
+    
+    let currentJump
+      = destJump * Math.sin(Math.PI * phase) * (-1);
+    
+    this.xOffset = destX * phase;
+    this.yOffset = destY * phase + currentJump;
+  }
+
+  
   doing(){
     if(this.actions.length > 0){
       let elapsedTime
         = Date.now() - this.startDoingTime;
         
       if(elapsedTime < this.currentAction.period){
-        console.log(this.img.src);
         this.currentAction.actionFunc.call(this);
       } else {
         this.xOffset = this.currentAction.destX;
@@ -150,18 +166,3 @@ class Sprite {
   }
 }
 
-function dafaultMoving( destJump=0 ){
-    let period = this.currentAction.period;
-    let destX = this.currentAction.destX;
-    let destY = this.currentAction.destY;
-    
-    let elapsedTime
-      = Date.now() - this.startMovingTime;
-    let phase = elapsedTime / period;
-    
-    let currentJump
-      = destJump * Math.sin(Math.PI * phase) * (-1);
-    
-    this.xOffset = destX * phase;
-    this.yOffset = destY * phase + currentJump;
-  }
