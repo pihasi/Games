@@ -55,11 +55,11 @@ class Sprite {
   }
   
   set centerX(cx){
-    this.setx( cx - this.width / 2 );
+    this.x = cx - this.width / 2;
   }
   
   set centerY(cy){
-    this.sety( cy - this.height / 2 );
+    this.y = cy - this.height / 2;
   }
 
   get centerX(){
@@ -136,16 +136,24 @@ class Sprite {
     let period = this.currentAction.period;
     let destX = this.currentAction.destX;
     let destY = this.currentAction.destY;
-    
-    let elapsedTime
-      = Date.now() - this.startDoingTime;
-    let phase = elapsedTime / period;
+    let phase = this.phase;
     
     let currentJump
       = destJump * Math.sin(Math.PI * phase) * (-1);
     
     this.xOffset = destX * phase;
     this.yOffset = destY * phase + currentJump;
+  }
+  
+  get elapsedTime(){
+    return Date.now() - this.startDoingTime;
+  }
+  
+  get phase(){
+    let phase
+      = this.elapsedTime / this.currentAction.period;
+    
+    return phase;
   }
   
   deleteActions(){
@@ -174,7 +182,7 @@ class Sprite {
       let elapsedTime
         = Date.now() - this.startDoingTime;
         
-      if(elapsedTime < this.currentAction.period){
+      if(this.elapsedTime < this.currentAction.period){
         this.currentAction.actionFunc.call(this);
       } else {
         this.xOffset = this.currentAction.destX;

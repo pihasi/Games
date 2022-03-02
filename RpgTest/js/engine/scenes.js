@@ -315,6 +315,27 @@ class insideCave extends createScene{
       }
     ));
     
+    
+    let ellipseMotion
+    = function(horLen, verLen,
+      initPhase=0, direction=1){
+        let period = this.currentAction.period;
+        let phase = this.phase;
+        
+        
+        let x = horLen * Math.cos(
+          direction * 2 * Math.PI * (initPhase + phase)
+        );
+
+        let y = (-1) * verLen * Math.sin(
+          direction * 2 * Math.PI * (initPhase + phase)
+        );
+          
+        
+        this.xOffset = x;
+        this.yOffset = y;
+    };
+    
     addSprite( new Sprite(
       images.ghost, 64*4, 0,
       function(){
@@ -328,7 +349,10 @@ class insideCave extends createScene{
       function() {
         showMessage(this, "ふっふっふっふ");
         killSprite(this);
-      }
+      },
+      [2000, 0,0, function(){
+        ellipseMotion.call(this, 32, 16, -0.25, -1);
+      }]
     ));
   }
 }
