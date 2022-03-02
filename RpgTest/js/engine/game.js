@@ -82,9 +82,25 @@ function setBackGround(img){
   }
   
 function addSprite(sprite) {
-    sprits.push(sprite);
-  }
+  sprits.push(sprite);
+}
 
+function insertSprite( idx, sprite ){
+  sprits.splice(idx, 0, sprite);
+}
+
+function insertSpriteBefore( targetSprite, newSprite ){
+  let idx = sprits.indexOf(targetSprite);
+  
+  if( idx != -1 ){
+    insertSprite( idx, newSprite );
+  } else {
+    console.log(
+    "on insertSpriteBefore(): can't find targetSprite",
+      targetSprite
+    );
+  }
+}
 
 function killSprite(target){
   sprits.some( function(sprite, idx){
@@ -112,22 +128,26 @@ function searchForClickedSprite(e){
 //console.log("click X:" + clickX + " Y:" + clickY);
 
   if(prioritySprite == null){
-        for (let i = 0; i < sprits.length; i++) {
-          let spriteX = sprits[i].x;
-          if(clickX < spriteX) continue;
-          
-          let spriteW = sprits[i].width;
-          if(clickX > spriteX + spriteW) continue;
-          
-          let spriteY = sprits[i].y;
-          if(clickY < spriteY) continue;
-          
-          let spriteH = sprits[i].height;
-          if(clickY > spriteY + spriteH) continue;
-          
-          sprits[i].clicked(clickX, clickY);
-          break;
-        }
+    for (let i = 0; i < sprits.length; i++) {
+      let sprite = sprits[i];
+      
+      if( ! sprite.isIgnoreClick ){
+        let spriteX = sprite.x;
+        if(clickX < spriteX) continue;
+        
+        let spriteW = sprite.width;
+        if(clickX > spriteX + spriteW) continue;
+        
+        let spriteY = sprite.y;
+        if(clickY < spriteY) continue;
+            
+        let spriteH = sprite.height;
+        if(clickY > spriteY + spriteH) continue;
+            
+        sprite.clicked(clickX, clickY);
+        break;
+      }
+    }
   } else {
     prioritySprite.clicked(clickX, clickY);
   }

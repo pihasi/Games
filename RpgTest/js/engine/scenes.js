@@ -350,8 +350,25 @@ class insideCave extends createScene{
       function(){
         showMessage(this, "ひっひっひっひ");
         killSprite(this);
-      }
-    ));
+      },
+      [
+        [2000,-64*2, 64],
+        [2000,64*2, -64]
+      ]
+      ).addAction(
+        [100, 0,0, ()=>{}, function(){
+          insertSpriteBefore( this, new Sprite(
+            images.ghost, this.x, this.y,
+            ()=>{},
+            [300, 0,0,()=>{}, function(){
+              killSprite(this);
+            }],
+            true
+          ));
+          this.startDoing(this.actions[1],0);
+        }]
+      )
+    );
   }
 }
 
@@ -374,7 +391,7 @@ class grassField extends createScene{
 
     let building = new Sprite(
       images.buildingp, 0, 64 * 3,
-      ()=>{},[],{},
+      ()=>{},[], true, {},
       128, 128
     );
     addSprite( building );

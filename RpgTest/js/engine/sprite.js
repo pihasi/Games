@@ -5,7 +5,7 @@ class Sprite {
   constructor(
     img, xInit=0, yInit=0,
     clickedAction=()=>{},
-    actionArray=[], data={},
+    actionArray=[], isIgnoreClick=false, data={},
     width=64, height=64) {
       this.img = new Image();
       this.img.src = img;
@@ -20,6 +20,8 @@ class Sprite {
       
       this.actions = [];
       this.addAction(actionArray);
+      
+      this.isIgnoreClick = isIgnoreClick;
 
       this.data = data;
   }
@@ -118,7 +120,7 @@ actions [
 */
   
 
-  addAction(actionArray){
+  addAction( actionArray=[] ){
     if( actionArray.length > 0 ){
       
       if( ! Array.isArray(actionArray[0]) ){
@@ -200,10 +202,10 @@ actions [
   }
   
   deleteActions(){
-    this.actions = [];
-
     this.xInit += this.xOffset;
     this.yInit += this.xOffset;
+
+    this.actions = [];
   }
 
 
@@ -240,8 +242,10 @@ actions [
         let returnXY =
         doing.processFunc.call(this, doing, phase);
 
-        action.xOffset = returnXY[0] || 0;
-        action.yOffset = returnXY[1] || 0;
+        if( returnXY != undefined ){
+          action.xOffset = returnXY[0];
+          action.yOffset = returnXY[1];
+        }
 
       } else {
         this.xInit += doing.destX;
