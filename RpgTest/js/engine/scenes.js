@@ -98,7 +98,7 @@ class testMap extends createScene{
         [1500, 100, 0],
       ]
     ));
-  
+
     addSprite( new Sprite(
       images.baby_smile_male, 64*2, 64*2,
       function(){
@@ -108,7 +108,7 @@ class testMap extends createScene{
     ));
   
     addSprite(new Sprite(
-      images.slime, 0, 64*2.5,
+      images.slime, 0, 64*2.7,
       function(){
         showMessage(this,
           "ぷよーん\nぷよーん\n"
@@ -122,7 +122,8 @@ class testMap extends createScene{
             		break; 
             	case 1:
             	  this.deleteClickedAction();
-            	  this.setActions([
+            	  this.deleteActions();
+            	  this.addAction([
             	    500,
             	    canvas.width/2, -canvas.height, 0,
             	    function(){ killSprite(this); }
@@ -317,12 +318,9 @@ class insideCave extends createScene{
     
     
     let ellipseMotion
-    = function(horLen, verLen,
+    = function(doing, phase,
+      horLen, verLen,
       initPhase=0, direction=1){
-        let period = this.currentAction.period;
-        let phase = this.phase;
-        
-        
         let x = horLen * Math.cos(
           direction * 2 * Math.PI * (initPhase + phase)
         );
@@ -332,9 +330,20 @@ class insideCave extends createScene{
         );
           
         
-        this.xOffset = x;
-        this.yOffset = y;
+        return [x, y];
     };
+
+    addSprite( new Sprite(
+      images.ghost, 64*0.5, 64*3.5,
+      function() {
+        showMessage(this, "ふっふっふっふ");
+        killSprite(this);
+      },
+      [2000, 0,0, function(doing, phase){
+        return ellipseMotion.call(this, doing, phase, 32, 16, -0.25, -1);
+      }]
+    ));
+
     
     addSprite( new Sprite(
       images.ghost, 64*4, 0,
@@ -342,17 +351,6 @@ class insideCave extends createScene{
         showMessage(this, "ひっひっひっひ");
         killSprite(this);
       }
-    ));
-    
-    addSprite( new Sprite(
-      images.ghost, 64*0.5, 64*3.5,
-      function() {
-        showMessage(this, "ふっふっふっふ");
-        killSprite(this);
-      },
-      [2000, 0,0, function(){
-        ellipseMotion.call(this, 32, 16, -0.25, -1);
-      }]
     ));
   }
 }
@@ -387,7 +385,7 @@ class grassField extends createScene{
       function(){
         //ミサイルをうつ処理
         this.deleteClickedAction();
-        this.setActions([
+        this.addAction([
           [50, -6, 0],
           [100, 12, 0],
           [100, -12, 0],
