@@ -1,6 +1,9 @@
 'use strict'
 
-class Sprite {
+
+
+
+class Sprite{
 
   constructor(
     img, xInit=0, yInit=0,
@@ -277,6 +280,18 @@ actions [
   
   clicked(clickX, clickY){
     this.clickedAction.call(this, clickX, clickY);
+  }
+  
+  
+  
+  destruct(){
+    if( prioritySprite === this ){
+      prioritySprite = null;
+    }
+    
+    this.actions = []; //killするのでたぶん不要だが念の為
+    
+    killSprite(this);
   }
 }
 

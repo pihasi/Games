@@ -7,7 +7,7 @@ function firstSceneStart(){
 }
 
 
-const images = {
+const sceneImages = {
   arrowUp:"./pic/info/upArrow.png",
   arrowLeft:"./pic/info/leftArrow.png",
   arrowRight:"./pic/info/rightArrow.png",
@@ -37,34 +37,9 @@ const images = {
 
 
 
-function createPromisesForPreLoad(){
-  let promises =[];
-  
-  Object.values(images).forEach( path => {
-    let promise = new Promise((resolve, reject) =>{
-      let img = new Image();
-    
-      img.addEventListener("load",() =>{resolve();},
-        { passive:true, once:true });
-      img.addEventListener("error",() =>{
-        reject("load error: " + path);},
-        { passive:true, once:true });
-
-      img.src = path;
-    });
-      
-    promises.push(promise);
-  });
-    
-    
-  return promises;
-}
 
 
-
-
-
-class createScene {
+class generateScene {
   constructor(backGround){
     destructCurrentScene();
     
@@ -77,16 +52,16 @@ class createScene {
   }
 }
 
-class testMap extends createScene{
+class testMap extends generateScene{
   constructor(){
-    super(images.roadOnGrass);
+    super(sceneImages.roadOnGrass);
     
     addSprite( new Sprite(
-      images.hero, 64*2, 64*4
+      sceneImages.hero, 64*2, 64*4
     ));
     
     addSprite( new Sprite(
-      images.house, 64*3, 64*0.5
+      sceneImages.house, 64*3, 64*0.5
       ,function(){
         showMessage(this, 
           ["僕は世にも珍しい\n動ける家だよ。",
@@ -100,7 +75,7 @@ class testMap extends createScene{
     ));
 
     addSprite( new Sprite(
-      images.baby_smile_male, 64*2, 64*2,
+      sceneImages.baby_smile_male, 64*2, 64*2,
       function(){
         showMessage(this,
           "我輩は赤ちゃんである。\n名前はまだ無い。");
@@ -108,7 +83,7 @@ class testMap extends createScene{
     ));
   
     addSprite(new Sprite(
-      images.slime, 0, 64*2.7,
+      sceneImages.slime, 0, 64*2.7,
       function(){
         showMessage(this,
           "ぷよーん\nぷよーん\n"
@@ -146,7 +121,7 @@ class testMap extends createScene{
     ));
   
     addSprite( new Sprite(
-      images.mummy, 64*3, 64*4, function(){
+      sceneImages.mummy, 64*3, 64*4, function(){
         if(playData.checkDurGame(
         "gaveWaterToMummy", true)){
           showMessage(this,
@@ -192,7 +167,7 @@ class testMap extends createScene{
     
       
     addSprite( new Sprite(
-      images.arrowRight, 64*4, 64,
+      sceneImages.arrowRight, 64*4, 64,
       function(){
         let scene = new caveEntrance();
         scene.start();
@@ -201,7 +176,7 @@ class testMap extends createScene{
     
     
     addSprite( new Sprite(
-      images.arrowLeft, 0, 64,
+      sceneImages.arrowLeft, 0, 64,
       function(){
         let scene = new grassField();
         scene.start();
@@ -213,17 +188,17 @@ class testMap extends createScene{
 
 
 
-class caveEntrance extends createScene{
+class caveEntrance extends generateScene{
   constructor(){
-    super(images.caveEntrance);
+    super(sceneImages.caveEntrance);
     
     addSprite( new Sprite(
-      images.hero, 0, 64*3
+      sceneImages.hero, 0, 64*3
     ));
     
     
     addSprite( new Sprite(
-      images.oldMan, 64*3, 64*4,
+      sceneImages.oldMan, 64*3, 64*4,
       function(){
         showMessage(this, "入らない方がいいぞよ");
       }
@@ -231,14 +206,14 @@ class caveEntrance extends createScene{
   
   
     addSprite( new Sprite(
-      images.woman_exercise, 64*1, 64*4,
+      sceneImages.woman_exercise, 64*1, 64*4,
       function(){
         showMessage(this,"わぁ！超楽しそうな洞窟！！");
       }
     ));
   
     addSprite( new Sprite(
-      images.arrowLeft, 0, 64,
+      sceneImages.arrowLeft, 0, 64,
       function(){
         let scene = new testMap();
         scene.start();
@@ -246,7 +221,7 @@ class caveEntrance extends createScene{
     ));
     
     addSprite( new Sprite(
-      images.arrowUp, 64*2, 64*2.5,
+      sceneImages.arrowUp, 64*2, 64*2.5,
       function(){
         let scene = new insideCave();
         scene.start();
@@ -257,12 +232,12 @@ class caveEntrance extends createScene{
 
 
 
-class insideCave extends createScene{
+class insideCave extends generateScene{
   constructor(){
     super(null);
     
     addSprite( new Sprite(
-      images.arrowReturn,
+      sceneImages.arrowReturn,
       64*2, 64*4,
       function(){
         let scene = new caveEntrance();
@@ -271,7 +246,7 @@ class insideCave extends createScene{
     ));
       
     addSprite( new Sprite(
-      images.man_walk, 64*3, 64*2,
+      sceneImages.man_walk, 64*3, 64*2,
       function(){
         let txt;
         if(! playData.checkDurGame("gotWater") ){
@@ -285,7 +260,7 @@ class insideCave extends createScene{
     ));
     
     addSprite(new Sprite(
-      images.mummy, 64*1, 64*0,
+      sceneImages.mummy, 64*1, 64*0,
       function(){
         if (! playData.checkDurGame("gotWater") ){
           showMessage(this,
@@ -334,7 +309,7 @@ class insideCave extends createScene{
     };
 
     addSprite( new Sprite(
-      images.ghost, 64*0.5, 64*3.5,
+      sceneImages.ghost, 64*0.5, 64*3.5,
       function() {
         showMessage(this, "ふっふっふっふ");
         killSprite(this);
@@ -346,7 +321,7 @@ class insideCave extends createScene{
 
     
     addSprite( new Sprite(
-      images.ghost, 64*4, 0,
+      sceneImages.ghost, 64*4, 0,
       function(){
         showMessage(this, "ひっひっひっひ");
         killSprite(this);
@@ -358,7 +333,7 @@ class insideCave extends createScene{
       ).addAction(
         [100, 0,0, ()=>{}, function(){
           insertSpriteBefore( this, new Sprite(
-            images.ghost, this.x, this.y,
+            sceneImages.ghost, this.x, this.y,
             ()=>{},
             [300, 0,0,()=>{}, function(){
               killSprite(this);
@@ -374,13 +349,13 @@ class insideCave extends createScene{
 
 
 
-class grassField extends createScene{
+class grassField extends generateScene{
   constructor(){
-    super(images.grass);
+    super(sceneImages.grass);
     
     
     addSprite( new Sprite(
-      images.arrowRight,
+      sceneImages.arrowRight,
       64*4, 64,
       function(){
         let scene = new testMap();
@@ -390,7 +365,7 @@ class grassField extends createScene{
 
 
     let building = new Sprite(
-      images.buildingp, 0, 64 * 3,
+      sceneImages.buildingp, 0, 64 * 3,
       ()=>{},[], true, {},
       128, 128
     );
@@ -398,7 +373,7 @@ class grassField extends createScene{
     
     
     addSprite( new Sprite(
-      images.canon, 64*3.75, 64*2.5,
+      sceneImages.canon, 64*3.75, 64*2.5,
       function(){
         //ミサイルをうつ処理
         this.deleteClickedAction();
@@ -414,7 +389,7 @@ class grassField extends createScene{
           [50, -6, 0, 0, function(){
             this.deleteActions();
             addSprite( new Sprite(
-              images.missile, this.x, this.y, ()=>{},
+              sceneImages.missile, this.x, this.y, ()=>{},
               [
                 1000,
                 building.centerX - this.centerX,
@@ -422,7 +397,12 @@ class grassField extends createScene{
                 128,
                 function(){
                   killSprite(this);
-                  building.img.src = images.building_broken;
+                  addSprite(
+                    new explosionFire(
+                      this.centerX, this.centerY
+                    )
+                  );
+                  building.img.src = sceneImages.building_broken;
                 }
               ]
             ));

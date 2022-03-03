@@ -43,6 +43,7 @@ const playData = {
 	    
 	    
 var sprits = [];
+var spritsNot
 var prioritySprite = null;
 var backGround = null;
 
@@ -52,9 +53,12 @@ var isNeedUpdate = false;
 
 
 function startGame(){
-  let promisese = createPromisesForPreLoad();
+  let promises
+    = createPromisesForPreLoad(sceneImages);
   
-  Promise.all( promisese ).then( result => {
+  createPromisesForPreLoad(effectImages, promises);
+  
+  Promise.all( promises ).then( result => {
     canvas = document.createElement('canvas');
     document.body.appendChild(canvas);
     canvas.width = widthCanvas;
@@ -67,6 +71,28 @@ function startGame(){
     console.error(reject);
   });
 }
+
+function createPromisesForPreLoad(images, promises=[]){
+  Object.values(images).forEach( path => {
+    let promise = new Promise((resolve, reject) =>{
+      let img = new Image();
+    
+      img.addEventListener("load",() =>{resolve();},
+        { passive:true, once:true });
+      img.addEventListener("error",() =>{
+        reject("load error: " + path);},
+        { passive:true, once:true });
+
+      img.src = path;
+    });
+      
+    promises.push(promise);
+  });
+    
+    
+  return promises;
+}
+
 
 function startCanvasAcceptClicked(){
       canvas.addEventListener("click", searchForClickedSprite);
