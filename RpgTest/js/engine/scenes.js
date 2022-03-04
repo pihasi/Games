@@ -332,18 +332,19 @@ class insideCave extends generateScene{
       ]
       ).addAction(
         [100, 0,0, ()=>{}, function(){
-          insertSpriteBefore( this, new Sprite(
+          insertSpriteBefore( this, new effectSprite(
             sceneImages.ghost, this.x, this.y,
-            ()=>{},
+            this.width, this.height,
             [300, 0,0,()=>{}, function(){
               killSprite(this);
-            }],
-            true
+            }]
           ));
-          this.startDoing(this.actions[1],0);
+         this.startDoing(this.actions[1],0);
         }]
       )
     );
+    
+    
   }
 }
 
@@ -388,8 +389,9 @@ class grassField extends generateScene{
           [100, 12, 0],
           [50, -6, 0, 0, function(){
             this.deleteActions();
-            addSprite( new Sprite(
-              sceneImages.missile, this.x, this.y, ()=>{},
+            addSprite( new effectSprite(
+              sceneImages.missile,
+              this.x, this.y, 64, 64,
               [
                 1000,
                 building.centerX - this.centerX,
